@@ -18,8 +18,6 @@ def save_table(data, type = 'csv'):
             data = data
         f.close()
 
-import csv, pickle
-
 def load_table(file, type = "csv"):
     dictionary = {} # Храним таблицу
     if type == "pickle": # Считываем таблицу используя pickle
