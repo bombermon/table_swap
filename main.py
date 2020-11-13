@@ -1,10 +1,41 @@
 import csv, pickle
 
-temp_data = {
-    'a': [1, 2.0, 3, 4+6j],
-    'b': ("character string", b"byte string"),
-    'c': {None, True, False}
-}
+temp_data = {}
+
+def save_table(data, type = 'csv'):
+    if type == 'csv':
+       ''' with open('NewFile' + '.csv', mode= 'w', encoding='UTF-8') as f:
+            #writer = csv.writer(f, delemiter = ',', lineterminator = '\r')
+            names = []
+            for i in data:
+                names.append(i)
+            writer = csv.DictWriter(f, delimiter=",", lineterminator="\r", fieldnames=names)
+            writer.writeheader()
+            writer.writerow({"Имя": "Саша", "Возраст": "6"})
+            writer.writerow({"Имя": "Маша", "Возраст": "15"})
+            writer.writerow({"Имя": "Вова", "Возраст": "14"})
+            '''
+
+       with open("classmates.csv", mode="w", encoding='utf-8') as w_file:
+           file_writer = csv.writer(w_file, delimiter=",", lineterminator="\r")
+           file_writer.writerow(["Имя", "Класс", "Возраст"])
+           file_writer.writerow(["Женя", "5", "10"])
+           file_writer.writerow(["Саша", "5", "12"])
+           file_writer.writerow(["Маша", "11", "18"])
+           w_file.close()
+
+    if type == 'pickle':
+        with open('NewFile' + '.pickle') as f:
+            data = data
+        f.close()
+
+    if type == 'txt':
+        with open('NewFile' + '.txt') as f:
+            data = data
+        f.close()
+
+save_table(temp_data)
+
 
 def load_table(file, type = "csv"):
     dictionary = {} # Храним таблицу
@@ -33,27 +64,3 @@ def load_table(file, type = "csv"):
         return -1
     return dictionary
 
-def save_table(data, type = 'csv'):
-    if type == 'csv':
-        with open('NewFile' + '.csv', mode= 'wb') as f:
-            #writer = csv.writer(f, delemiter = ',', lineterminator = '\r')
-            names = []
-            for i in data:
-                names.append(i)
-            writer = csv.DictWriter(data, delimiter=",", lineterminator="\r", fieldnames=names)
-            writer.writeheader()
-            writer.writerow(data)
-
-        f.close()
-
-    if type == 'pickle':
-        with open('NewFile' + '.pickle') as f:
-            data = data
-        f.close()
-
-    if type == 'txt':
-        with open('NewFile' + '.txt') as f:
-            data = data
-        f.close()
-
-save_table(temp_data)
