@@ -1,6 +1,10 @@
 import csv, pickle
 
-temp_data = {}
+temp_data = {
+    'a': [1, 2.0, 3, 4+6j],
+    'b': ("character string", b"byte string"),
+    'c': {None, True, False}
+}
 
 def save_table(data, type = 'csv'):
     if type == 'csv':
