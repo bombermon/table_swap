@@ -12,8 +12,7 @@ def save_table(data, type = 'csv'):
             names = []
             for i in data:
                 names.append(i)
-            file_writer = csv.DictWriter(w_file, delimiter=",",
-                                        lineterminator="\r", fieldnames=names)
+            file_writer = csv.DictWriter(w_file, delimiter=",", lineterminator="\r", fieldnames=names)
             file_writer.writeheader()
             temp = {}
             for i in data:
