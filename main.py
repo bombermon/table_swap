@@ -1,31 +1,27 @@
 import csv, pickle
+import re
 
-temp_data = {
-    'a': [1, 2.0, 3, 4+6j],
-    'b': ("character string", b"byte string"),
-    'c': {None, True, False}, 'clear': ['dada']
-}
+field_names = ['No', 'Company', 'Car Model'] #СЮДА ЗАПИСЫВАЕМ КЛЮЧИ
 
-def save_table(data, type = 'csv'):
+temp_data = [
+{'No': 1, 'Company': 'Ferrari', 'Car Model': '488 GTB'},
+{'No': 2, 'Company': 'Porsche', 'Car Model': '918 Spyder'},
+{'No': 3, 'Company': 'Bugatti', 'Car Model': 'La Voiture Noire'},
+{'No': 4, 'Company': 'Rolls Royce', 'Car Model': 'Phantom'},
+{'No': 5, 'Company': 'BMW', 'Car Model': 'BMW X7'},
+]  # СЛОВАРИ С ДАННЫМИ
+
+def save_table(data, file, type = 'csv'):
     if type == 'csv':
-        with open("classmates.csv", mode="w", encoding='utf-8') as w_file:
-            names = []
-            for i in data:
-                names.append(i)
-            file_writer = csv.DictWriter(w_file, delimiter=",", lineterminator="\r", fieldnames=names)
-            file_writer.writeheader()
-            temp = {}
-            for i in data:
-                for j in data[i]:
-
-                    temp[i] = j
-                    print(temp)
-                    file_writer.writerow(temp)
-                    temp.clear()
+        with open(file, 'w') as csvfile:
+            writer = csv.DictWriter(csvfile, fieldnames=field_names)
+            writer.writeheader()
+            writer.writerows(data)
 
     if type == 'pickle':
         with open('NewFile' + '.pickle') as f:
-            data = data
+            for i in data:
+                pickle.dumps(i, f)
         f.close()
 
     if type == 'txt':
@@ -33,7 +29,7 @@ def save_table(data, type = 'csv'):
             data = data
         f.close()
 
-save_table(temp_data)
+save_table(temp_data, type='pickle')
 
 
 def load_table(file, type = "csv"):
@@ -62,4 +58,3 @@ def load_table(file, type = "csv"):
     else:
         return -1
     return dictionary
-
