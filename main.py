@@ -1,30 +1,23 @@
 import csv, pickle
 import re
 
-field_names = ['No', 'Company', 'Car Model'] #СЮДА ЗАПИСЫВАЕМ КЛЮЧИ
 
-temp_data = [
-{'No': 1, 'Company': 'Ferrari', 'Car Model': '488 GTB'},
-{'No': 2, 'Company': 'Porsche', 'Car Model': '918 Spyder'},
-{'No': 3, 'Company': 'Bugatti', 'Car Model': 'La Voiture Noire'},
-{'No': 4, 'Company': 'Rolls Royce', 'Car Model': 'Phantom'},
-{'No': 5, 'Company': 'BMW', 'Car Model': 'BMW X7'},
-]  # СЛОВАРИ С ДАННЫМИ
 
-def save_table(data, file, type = 'csv'):
+temp_data = {'No': ['1','2','3','4'], 'Company': ['Ferrari','Lamba'], 'Car Model': ['488 GTB','phantom']}
+
+def save_table(data, type = 'pickle'):
     if type == 'csv':
-        with open(file, 'w') as csvfile:
-            writer = csv.DictWriter(csvfile, fieldnames=field_names)
-            writer.writeheader()
+        with open('NewFile' + '.csv', 'w') as csvfile:
+            writer = csv.DictWriter(csvfile)
+           # writer.writeheader()
             writer.writerows(data)
 
-    if type == 'pickle':
-        with open('NewFile' + '.pickle') as f:
-            for i in data:
-                pickle.dumps(i, f)
+    elif type == 'pickle':
+        with open('NewFile' + '.pickle', 'wb') as f:
+            pickle.dump(data, f)
         f.close()
 
-    if type == 'txt':
+    elif type == 'txt':
         with open('NewFile' + '.txt') as f:
             data = data
         f.close()
