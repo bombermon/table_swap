@@ -8,7 +8,7 @@ temp_data = {'No': ['1','2','3','4'], 'Company': ['Ferrari','Lamba'], 'Car Model
 
 def save_table(data, type = 'pickle'):
     if type == 'csv':
-        fiel_names = []
+        field_names = []
 
 
         with open('NewFile' + '.csv', 'a+') as csvfile:
@@ -28,7 +28,15 @@ def save_table(data, type = 'pickle'):
 
 save_table(temp_data, type='txt')
 
-def print_table():
+def print_table(data):
+    max_l = 0
+    for i in data:
+        if i.len() > max_l:
+            max_l = i
+        for j in data[i]:
+            if j.len() > max_l:
+                max_l = j
+    print(max_l)
 
 
 def load_table(file, type = "csv"):
