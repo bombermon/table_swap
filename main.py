@@ -5,11 +5,20 @@ import re
 
 temp_data = {'No': ['1','2','3','4'], 'Company': ['Ferrari','Lamba'], 'Car Model': ['488 GTB','phantom']}
 
+
 def save_table(data, type = 'pickle'):
     if type == 'csv':
-        with open('NewFile' + '.csv', 'w') as csvfile:
-            writer = csv.DictWriter(csvfile)
-           # writer.writeheader()
+        dictionary = []
+        field_names = []
+        for i in data:
+            field_names.append(i)
+            for j in data[i]:
+
+
+
+        with open('NewFile' + '.csv', 'a+') as csvfile:
+            writer = csv.DictWriter(csvfile, fieldnames=field_names)
+            writer.writeheader()
             writer.writerows(data)
 
     elif type == 'pickle':
