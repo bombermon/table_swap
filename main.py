@@ -8,13 +8,22 @@ temp_data = {'No': ['1','2','3','4'], 'Company': ['Ferrari','Lamba'], 'Car Model
 
 def save_table(data, type = 'pickle'):
     if type == 'csv':
-        field_names = []
-
-
+        temp_table = []
+        field_names = data.keys()
+        num_of_colums = 0
+        for i in field_names:
+            num_of_colums = max(num_of_colums, len(data[i]))
+        for i in range(0, num_of_colums):
+            values = dict.fromkeys(field_names)
+            for j in field_names:
+                if i < len(data[j]):
+                    values[j] = data[j][i]
+            temp_table.append(values)
+        print(temp_table)
         with open('NewFile' + '.csv', 'a+') as csvfile:
             writer = csv.DictWriter(csvfile, fieldnames=field_names)
             writer.writeheader()
-            writer.writerows(data)
+            writer.writerows(temp_table)
 
     elif type == 'pickle':
         with open('NewFile' + '.pickle', 'wb') as f:
@@ -22,21 +31,11 @@ def save_table(data, type = 'pickle'):
         f.close()
 
     elif type == 'txt':
-        with open('NewFile' + '.txt', 'a+') as f:
-            print(data, file=f)
+        with open('NewFile' + '.txt') as f:
+            data = data
         f.close()
 
-save_table(temp_data, type='txt')
-
-def print_table(data):
-    max_l = 0
-    for i in data:
-        if i.len() > max_l:
-            max_l = i
-        for j in data[i]:
-            if j.len() > max_l:
-                max_l = j
-    print(max_l)
+save_table(temp_data, type='pickle')
 
 
 def load_table(file, type = "csv"):
