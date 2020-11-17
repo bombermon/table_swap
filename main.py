@@ -8,18 +8,22 @@ temp_data = {'No': ['1','2','3','4'], 'Company': ['Ferrari','Lamba'], 'Car Model
 
 def save_table(data, type = 'pickle'):
     if type == 'csv':
-        dictionary = []
-        field_names = []
-        for i in data:
-            field_names.append(i)
-            for j in data[i]:
-
-
-
+        temp_table = []
+        field_names = data.keys()
+        num_of_colums = 0
+        for i in field_names:
+            num_of_colums = max(num_of_colums, len(data[i]))
+        for i in range(0, num_of_colums):
+            values = dict.fromkeys(field_names)
+            for j in field_names:
+                if i < len(data[j]):
+                    values[j] = data[j][i]
+            temp_table.append(values)
+        print(temp_table)
         with open('NewFile' + '.csv', 'a+') as csvfile:
             writer = csv.DictWriter(csvfile, fieldnames=field_names)
             writer.writeheader()
-            writer.writerows(data)
+            writer.writerows(temp_table)
 
     elif type == 'pickle':
         with open('NewFile' + '.pickle', 'wb') as f:
