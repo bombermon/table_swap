@@ -3,17 +3,18 @@ import re
 
 
 
-temp_data = {'No': ['1','2','3','4'], 'Company': ['Ferrari','Lamba'], 'Car Model': ['488 GTB','phantom']}
+temp_data = [
+{'No': 1, 'Name': 'Alex', 'Country': 'India'},
+{'No': 2, 'Name': 'Ben', 'Country': 'USA'},
+{'No': 3, 'Name': 'Shri Ram', 'Country': 'India'},
+{'No': 4, 'Name': 'Smith', 'Country': 'USA'},
+{'No': 5, 'Name': 'Yuva Raj', 'Country': 'India'},
+]
 
 
 def save_table(data, type = 'pickle'):
     if type == 'csv':
-        dictionary = []
-        field_names = []
-        for i in data:
-            field_names.append(i)
-            for j in data[i]:
-
+        fiel_names = []
 
 
         with open('NewFile' + '.csv', 'a+') as csvfile:
@@ -27,11 +28,13 @@ def save_table(data, type = 'pickle'):
         f.close()
 
     elif type == 'txt':
-        with open('NewFile' + '.txt') as f:
-            data = data
+        with open('NewFile' + '.txt', 'a+') as f:
+            print(data, file=f)
         f.close()
 
-save_table(temp_data, type='pickle')
+save_table(temp_data, type='txt')
+
+def print_table():
 
 
 def load_table(file, type = "csv"):
