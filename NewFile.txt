@@ -1,2 +1,5 @@
-{'No': ['1', '2', '3', '4'], 'Company': ['Ferrari', 'Lamba'], 'Car Model': ['488 GTB', 'phantom']}
-{'No': ['1', '2', '3', '4'], 'Company': ['Ferrari', 'Lamba'], 'Car Model': ['488 GTB', 'phantom']}
+No  |Company    |Car Model  |
+1999|Ferrari    |488 GTB    |
+2   |Lamborghini|phantom    |
+3   |porsche    |macan      |
+4   |BMW        |X5         |
