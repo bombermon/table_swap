@@ -21,6 +21,23 @@ def print_table(data):
                 i = i + ' '
         print(i + '|', end="")
         field_names_len[i] = len_of_col[temp_key]
+    print()
+
+
+    num_str = 0
+    while True:
+        try:
+            for i in data:
+                temp = data[i][num_str]
+                if len(temp) < len_of_col[i]:
+                    while len(temp) < len_of_col[i]:
+                        temp += ' '
+                temp += '|'
+                print(temp)
+                num_str+=1
+        except IndexError:
+            break
+
 
 
 
