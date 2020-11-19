@@ -6,7 +6,9 @@ import re
 temp_data = {'No': ['1999','2','3','4'], 'Company': ['Ferrari','Lamborghini','porsche', 'BMW'],
              'Car Model': ['488 GTB', 'phantom', 'macan', 'X5']}
 
-def print_table(data):
+temp_spisok = ['1','2','3','4']
+def print_table():
+    data = temp_data
     len_of_col = {}
     max_l = 0
     for i in data:              # ПЕРЕБОР СЛОВАРЯ ПО ВСЕМ СЛОВАМ И ЗНАЧЕНИЯМ
@@ -71,7 +73,8 @@ def save_table(data, type = 'txt'):
 
     elif type == 'txt':
         with open('NewFile' + '.txt', 'w') as f:
-            len_of_col = {}
+            data = temp_data
+            len_of_col = {}  # СЛОВАРЬ ДЛЯ ХРАНЕНИЯ ДЛИНЫ СТОЛБЦОВ
             max_l = 0
             for i in data:  # ПЕРЕБОР СЛОВАРЯ ПО ВСЕМ СЛОВАМ И ЗНАЧЕНИЯМ
                 if len(i) > max_l:  # НАХОЖДЕНИЕ САМОГО ДЛИННОГО СЛОВА
@@ -79,7 +82,7 @@ def save_table(data, type = 'txt'):
                 for j in data[i]:
                     if len(j) > max_l:
                         max_l = len(j)
-                len_of_col[i] = max_l
+                len_of_col[i] = max_l   # ЗАПОЛНЕНИЯ СЛОВАРЯ МАКСИМАЛЬНЫМИ ДЛИНАМИ
 
             field_names_len = {}
             for i in len_of_col:  # ФОРМИРОВАНИЕ РОВНЫХ СТОЛБЦОВ
@@ -135,7 +138,22 @@ def load_table(file, type = "csv"):
         return -1
     return dictionary
 
+def set_values(values, column = 0):
+    field_names = []
+    for i in temp_data:
+        field_names.append(i)
 
 
 
-save_table(temp_data)
+
+
+
+
+# ЗОНА ТЕСТОВ НАЧАЛО ЗОНА ТЕСТОВ НАЧАЛО ЗОНА ТЕСТОВ НАЧАЛО ЗОНА ТЕСТОВ НАЧАЛО ЗОНА ТЕСТОВ НАЧАЛО ЗОНА ТЕСТОВ НАЧАЛ
+
+
+print_table()
+
+
+# ЗОНА ТЕСТОВ КОНЕЦ ЗОНА ТЕСТОВ КОНЕЦ ЗОНА ТЕСТОВ КОНЕЦ ЗОНА ТЕСТОВ КОНЕЦ ЗОНА ТЕСТОВ КОНЕЦ ЗОНА ТЕСТОВ КОНЕЦ ЗОНА
+
