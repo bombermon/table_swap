@@ -2,14 +2,9 @@ import csv, pickle
 import re
 
 temp_data = [{'No': ['1999', '2', '3', '4'], 'Company': ['Ferrari', 'Lamborghini', 'porsche', 'BMW'],
-             'Car Model': ['488 GTB', 'phantom', 'macan', 'X5']}, {}]
+              'Car Model': ['488 GTB', 'phantom', 'macan', 'X5']}, {}]
 
 temp_spisok = ['1', '2', '3', '4', '5']
-
-
-
-
-
 
 
 def print_table():
@@ -50,7 +45,7 @@ def print_table():
             break
 
 
-def save_table(data, type='txt'):
+def save_table(data, type='csv'):
     if type == 'csv':
         temp_table = []
         field_names = data.keys()
@@ -115,32 +110,34 @@ def save_table(data, type='txt'):
 
 
 def load_table(file, type="csv"):
+    global temp_data
     dictionary = {}  # Храним таблицу
-    if type == "pickle":  # Считываем таблицу используя pickle
-        dictionary = pickle.load(file)
-    elif type == "csv":  # Считываем таблицу используя csv
-        file_reader = csv.reader(file, delimiter=",")  # преобразуем файл в лист листов
-        table_key_dictionary = {}  # Создаем словарь атрибутов таблицы и записываем их номер
-        # Счетчик для подсчета количества строк
-        lines_count = 0  # Считаем номер строки
-        # Считывание данных из CSV файла
-        for row in file_reader:  # Проходимся по строкам таблицы
-            if lines_count == 0:  # В первой строк находяться атрибуты, создаем ключи в словаре
-                key_count = 0
-                for i in row:
-                    dictionary[i] = []
-                    table_key_dictionary[key_count] = i
-                    key_count += 1
-            else:
-                key_count = 0
-                for i in row:
-                    dictionary.get(table_key_dictionary.get(key_count)).append(
-                        i)  # Записываем нужный столбик нужный элемент
-                    key_count += 1
-            lines_count += 1
-    else:
-        return -1
-    return dictionary
+    try:
+        if type == "pickle":  # Считываем таблицу используя pickle
+            dictionary = pickle.load(file)
+        elif type == "csv":  # Считываем таблицу используя csv
+            file_reader = csv.reader(file, delimiter=",")  # преобразуем файл в лист листов
+            table_key_dictionary = {}  # Создаем словарь атрибутов таблицы и записываем их номер
+            # Счетчик для подсчета количества строк
+            lines_count = 0  # Считаем номер строки
+            # Считывание данных из CSV файла
+            for row in file_reader:  # Проходимся по строкам таблицы
+                if lines_count == 0:  # В первой строк находяться атрибуты, создаем ключи в словаре
+                    key_count = 0
+                    for i in row:
+                        dictionary[i] = []
+                        table_key_dictionary[key_count] = i
+                        key_count += 1
+                else:
+                    key_count = 0
+                    for i in row:
+                        dictionary.get(table_key_dictionary.get(key_count)).append(
+                            i)  # Записываем нужный столбик нужный элемент
+                        key_count += 1
+                lines_count += 1
+    except ValueError:
+        print('Fail')
+    temp_data[0] = dictionary
 
 
 def set_values(values, column=0):
@@ -155,11 +152,10 @@ def set_values(values, column=0):
         print('Ошибка: номер столбца выбран неверно!')
 
 
-
-
 # ЗОНА ТЕСТОВ НАЧАЛО ЗОНА ТЕСТОВ НАЧАЛО ЗОНА ТЕСТОВ НАЧАЛО ЗОНА ТЕСТОВ НАЧАЛО ЗОНА ТЕСТОВ НАЧАЛО ЗОНА ТЕСТОВ НАЧАЛ
 
 set_values(temp_spisok)
+save_table(temp_data[0])
 print_table()
 
 # ЗОНА ТЕСТОВ КОНЕЦ ЗОНА ТЕСТОВ КОНЕЦ ЗОНА ТЕСТОВ КОНЕЦ ЗОНА ТЕСТОВ КОНЕЦ ЗОНА ТЕСТОВ КОНЕЦ ЗОНА ТЕСТОВ КОНЕЦ ЗОНА

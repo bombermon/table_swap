@@ -1,5 +1,6 @@
 import csv, pickle
 import re
+import main
 
 temp_data = {'No': ['1999', '2', '3', '4'], 'Company': ['Ferrari', 'Lamborghini', 'porsche', 'BMW'],
              'Car Model': ['488 GTB', 'phantom', 'macan', 'X5']}
@@ -158,3 +159,8 @@ set_values(temp_spisok)
 print_table()
 
 # ЗОНА ТЕСТОВ КОНЕЦ ЗОНА ТЕСТОВ КОНЕЦ ЗОНА ТЕСТОВ КОНЕЦ ЗОНА ТЕСТОВ КОНЕЦ ЗОНА ТЕСТОВ КОНЕЦ ЗОНА ТЕСТОВ КОНЕЦ ЗОНА
+
+
+main.load_table(ДАЛ ФАЙЛ)
+
+main.
