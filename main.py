@@ -2,7 +2,8 @@ import csv, pickle
 import re
 
 temp_data = [{'No': ['1999', '2', '3', '4'], 'Company': ['Ferrari', 'Lamborghini', 'porsche', 'BMW'],
-              'Car Model': ['488 GTB', 'phantom', 'macan', 'X5']}, {}]
+              'Car Model': ['488 GTB', 'phantom', 'macan', 'X5']}, {'No': [float, int, bool, str], 'Company': [float, int, bool, str],
+              'Car Model': [float, int, bool, str]}]
 
 temp_spisok = ['1', '2', '3', '4', '5']
 
