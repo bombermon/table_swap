@@ -138,12 +138,15 @@ def load_table(file, type = "csv"):
         return -1
     return dictionary
 
-def set_values(values, column = 0):
-    field_names = []
-    for i in temp_data:
-        field_names.append(i)
-    print(field_names)
-    temp_data[field_names[column]] = values
+def set_values(values, column = 3):
+    try:
+        field_names = []
+        for i in temp_data:
+            field_names.append(i)
+        print(field_names)
+        temp_data[field_names[column]] = values
+    except IndexError:
+        print('Ошибка: номер столбца выбран неверно!')
 
 
 
