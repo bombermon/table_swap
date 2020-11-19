@@ -6,7 +6,7 @@ import re
 temp_data = {'No': ['1999','2','3','4'], 'Company': ['Ferrari','Lamborghini','porsche', 'BMW'],
              'Car Model': ['488 GTB', 'phantom', 'macan', 'X5']}
 
-temp_spisok = ['1','2','3','4']
+temp_spisok = ['1','2','3','4','5']
 def print_table():
     data = temp_data
     len_of_col = {}
@@ -142,7 +142,8 @@ def set_values(values, column = 0):
     field_names = []
     for i in temp_data:
         field_names.append(i)
-
+    print(field_names)
+    temp_data[field_names[column]] = values
 
 
 
@@ -151,7 +152,7 @@ def set_values(values, column = 0):
 
 # ЗОНА ТЕСТОВ НАЧАЛО ЗОНА ТЕСТОВ НАЧАЛО ЗОНА ТЕСТОВ НАЧАЛО ЗОНА ТЕСТОВ НАЧАЛО ЗОНА ТЕСТОВ НАЧАЛО ЗОНА ТЕСТОВ НАЧАЛ
 
-
+set_values(temp_spisok)
 print_table()
 
 
