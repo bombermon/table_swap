@@ -1,15 +1,19 @@
 import csv, pickle
 import re
 
-temp_data = {'No': ['1999', '2', '3', '4'], 'Company': ['Ferrari', 'Lamborghini', 'porsche', 'BMW'],
-             'Car Model': ['488 GTB', 'phantom', 'macan', 'X5']}
+temp_data = [{'No': ['1999', '2', '3', '4'], 'Company': ['Ferrari', 'Lamborghini', 'porsche', 'BMW'],
+             'Car Model': ['488 GTB', 'phantom', 'macan', 'X5']}, {}]
 
 temp_spisok = ['1', '2', '3', '4', '5']
 
-types_dict = {}
+
+
+
+
+
 
 def print_table():
-    data = temp_data
+    data = temp_data[0]
     len_of_col = {}
     max_l = 0
     for i in data:  # ПЕРЕБОР СЛОВАРЯ ПО ВСЕМ СЛОВАМ И ЗНАЧЕНИЯМ
@@ -141,11 +145,12 @@ def load_table(file, type="csv"):
 
 def set_values(values, column=0):
     try:
+        data = temp_data[0]
         field_names = []
-        for i in temp_data:
+        for i in data:
             field_names.append(i)
         print(field_names)
-        temp_data[field_names[column]] = values
+        data[field_names[column]] = values
     except IndexError:
         print('Ошибка: номер столбца выбран неверно!')
 
