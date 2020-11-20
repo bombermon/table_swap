@@ -59,8 +59,7 @@ def save_table(data, type='csv'):
                 if i < len(data[j]):
                     values[j] = data[j][i]
             temp_table.append(values)
-        print(temp_table)
-        with open('NewFile' + '.csv', 'a+') as csvfile:
+        with open('NewFile' + '.csv', 'w') as csvfile:
             writer = csv.DictWriter(csvfile, fieldnames=field_names)
             writer.writeheader()
             writer.writerows(temp_table)
@@ -144,10 +143,21 @@ def load_table(file, type="csv"):
 def set_values(values, column=0):
     try:
         data = temp_data[0]
+        typer = temp_data[1]
         field_names = []
+        flag = False
         for i in data:
             field_names.append(i)
-        print(field_names)
+        for k in values:
+            for j in typer[field_names[column]]:
+                if type(k) == j:
+                    flag = True
+
+        if flag == False:
+            print('Оишбка! Вы ввели значения, не подходящие данному столбцу(', typer[field_names[column]], ')')
+            return
+
+
         data[field_names[column]] = values
     except IndexError:
         print('Ошибка: номер столбца выбран неверно!')
@@ -156,6 +166,7 @@ def set_values(values, column=0):
 # ЗОНА ТЕСТОВ НАЧАЛО ЗОНА ТЕСТОВ НАЧАЛО ЗОНА ТЕСТОВ НАЧАЛО ЗОНА ТЕСТОВ НАЧАЛО ЗОНА ТЕСТОВ НАЧАЛО ЗОНА ТЕСТОВ НАЧАЛ
 
 set_values(temp_spisok)
+
 save_table(temp_data[0])
 print_table()
 

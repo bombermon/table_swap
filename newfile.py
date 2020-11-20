@@ -162,5 +162,7 @@ print_table()
 
 
 main.load_table(ДАЛ ФАЙЛ)
+main.print_table()
+mail.save_table('НАЗВАНИЕ НОВОГО ФАЙЛА')
 
 main.
