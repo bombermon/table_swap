@@ -2,10 +2,10 @@ import csv, pickle
 import re
 
 temp_data = [{'No': ['1999', '2', '3', '4'], 'Company': ['Ferrari', 'Lamborghini', 'porsche', 'BMW'],
-              'Car Model': ['488 GTB', 'phantom', 'macan', 'X5']}, {'No': [float, int, bool, str], 'Company': [float, int, bool, str],
+              'Car Model': ['488 GTB', 'phantom', 'macan', 'X5']}, {'No': [float, bool, str], 'Company': [float, int, bool, str],
               'Car Model': [float, int, bool, str]}]
 
-temp_spisok = ['1', '2', '3', '4', '5']
+temp_spisok = ['1', '2', 3, '4', '5']
 
 
 def print_table():
@@ -16,7 +16,7 @@ def print_table():
         if len(i) > max_l:  # НАХОЖДЕНИЕ САМОГО ДЛИННОГО СЛОВА
             max_l = len(i)
         for j in data[i]:
-            if len(j) > max_l:
+            if len(str(j)) > max_l:
                 max_l = len(j)
         len_of_col[i] = max_l
 
@@ -34,9 +34,9 @@ def print_table():
     while True:
         try:
             for i in data:  # ДОБАВЛЕНИЕ ПРОБЕЛОВ ДЛЯ РОВНЫХ СТОЛБЦОВ
-                temp = data[i][num_str]
-                if len(temp) < len_of_col[i]:
-                    while len(temp) < len_of_col[i]:
+                temp = str(data[i][num_str])
+                if len(str(temp)) < len_of_col[i]:
+                    while len(str(temp)) < len_of_col[i]:
                         temp += ' '
                 temp += '|'
                 print(temp, end='')
