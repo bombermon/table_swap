@@ -4,10 +4,8 @@ import re
 
 
 class Table:
-    _data = {'No': ['1999', '2', '3', '4'], 'Company': ['Ferrari', 'Lamborghini', 'porsche', 'BMW'],
-              'Car Model': ['488 GTB', 'phantom', 'macan', 'X5']}
-    _type_list = {'No': str, 'Company': str,
-                   'Car Model': str}
+    _data = {}
+    _type_list = {}
 
     # ФУНКЦИЯ ИЗМЕНЕНИЯ ЗНАЧЕНИЙ В ОПРЕДЕЛЕННОМ СТОЛБИКЕ НАЧАЛО
     def set_values(self, values, column=0):
@@ -174,13 +172,13 @@ class Table:
             print(self.csv_reader[self.number-1:self.number_2])
 
 # ФУНКЦИЯ ВЫГРУЗКИ ТАБЛИЦЫ ИЗ ФАЙЛА НАЧАЛО
-def load_table(file, type="csv"):
+def load_table(file, Type="csv"):
     table = Table()  # Храним таблицу
     try:
-        if type == "pickle":  # Считываем таблицу используя pickle
+        if Type == "pickle":  # Считываем таблицу используя pickle
             with open(file, "rb") as f:
                 table = pickle.load(f)
-        elif type == "csv":  # Считываем таблицу используя csv
+        elif Type == "csv":  # Считываем таблицу используя csv
             dictionary = {}
             with open(file, "r") as f:
                 file_reader = csv.reader(f, delimiter=",")  # преобразуем файл в лист листов
@@ -205,13 +203,9 @@ def load_table(file, type="csv"):
             table._data = dictionary
             type_list = {}
             for i in dictionary:
-                print(i)
                 temp = dictionary[i][0]
-                print(type(int(temp)))
-                if type(temp) == str:
-                    type_list[i] = str
+                type_list[i] = type(temp)
             table._type_list = type_list
-            print(type_list)
         return table
     except ValueError:
         print('Fail')
