@@ -161,6 +161,12 @@ def set_values(values, column=0):
     except IndexError:
         print('Ошибка: номер столбца выбран неверно!')
 
+def get_rows_by_number():
+    with open('table.csv') as csv_file:
+        csv_reader = list(csv.reader(csv_file))
+        number_1 = int(input('Введите номер первой строчки: '))
+        number_2 = int(input('Введите номер второй строчки: '))
+        print(csv_reader[number_1-1:number_2])
 
 # ЗОНА ТЕСТОВ НАЧАЛО ЗОНА ТЕСТОВ НАЧАЛО ЗОНА ТЕСТОВ НАЧАЛО ЗОНА ТЕСТОВ НАЧАЛО ЗОНА ТЕСТОВ НАЧАЛО ЗОНА ТЕСТОВ НАЧАЛ
 
