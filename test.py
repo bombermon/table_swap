@@ -166,8 +166,8 @@ class Table:
 
     # ФУНКЦИЯ ВЫГРУЗКИ ТАБЛИЦЫ ИЗ ФАЙЛА КОНЕЦ
 
-    def get_column_types(self, by_number = True):
-        if by_number:
+    def get_column_types(self, by_number = True): #Получаем словарь с типами столбцов
+        if by_number: # если нало нумеруем от одного
             type_list = {}
             counter = 1
             for i in self.__type_list:
@@ -176,5 +176,4 @@ class Table:
             return type_list
         else:
             return self.__type_list
-
 
