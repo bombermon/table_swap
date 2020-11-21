@@ -85,7 +85,7 @@ class Table:
     # ФУНКЦИЯ ВЫВОДА ТАБЛИЦЫ В КОНСОЛЬ НАЧАЛО
 
     # ФУНКЦИЯ СОХРАНЕНИЯ ТАБЛИЦЫ В НОВЫЙ ФАЙЛ НАЧАЛО
-    def save_table(self, type='csv'):
+    def save_table(self):
         data = self._data
         if type == 'csv':
             temp_table = []
@@ -146,39 +146,6 @@ class Table:
                         break
     # ФУНКЦИЯ СОХРАНЕНИЯ ТАБЛИЦЫ В НОВЫЙ ФАЙЛ КОНЕЦ
 
-    # ФУНКЦИЯ ВЫГРУЗКИ ТАБЛИЦЫ ИЗ ФАЙЛА НАЧАЛО
-    def load_table(file, type="csv"):
-        global temp_data
-        dictionary = {}  # Храним таблицу
-        try:
-            if type == "pickle":  # Считываем таблицу используя pickle
-                dictionary = pickle.load(file)
-            elif type == "csv":  # Считываем таблицу используя csv
-                file_reader = csv.reader(file, delimiter=",")  # преобразуем файл в лист листов
-                table_key_dictionary = {}  # Создаем словарь атрибутов таблицы и записываем их номер
-                # Счетчик для подсчета количества строк
-                lines_count = 0  # Считаем номер строки
-                # Считывание данных из CSV файла
-                for row in file_reader:  # Проходимся по строкам таблицы
-                    if lines_count == 0:  # В первой строк находяться атрибуты, создаем ключи в словаре
-                        key_count = 0
-                        for i in row:
-                            dictionary[i] = []
-                            table_key_dictionary[key_count] = i
-                            key_count += 1
-                    else:
-                        key_count = 0
-                        for i in row:
-                            dictionary.get(table_key_dictionary.get(key_count)).append(
-                                i)  # Записываем нужный столбик нужный элемент
-                            key_count += 1
-                    lines_count += 1
-        except ValueError:
-            print('Fail')
-        temp_data[0] = dictionary
-
-    # ФУНКЦИЯ ВЫГРУЗКИ ТАБЛИЦЫ ИЗ ФАЙЛА КОНЕЦ
-
     def get_column_types(self, by_number = True): #Получаем словарь с типами столбцов
         if by_number: # если надо нумеруем от одного
             type_list = {}
@@ -205,3 +172,46 @@ class Table:
             self.number = int(input('Введите номер первой строчки: '))
             self.number_2 = int(input('Введите номер второй строчки: '))
             print(self.csv_reader[self.number-1:self.number_2])
+
+# ФУНКЦИЯ ВЫГРУЗКИ ТАБЛИЦЫ ИЗ ФАЙЛА НАЧАЛО
+def load_table(file, type="csv"):
+    global temp_data
+    table = Table()  # Храним таблицу
+    try:
+        if type == "pickle":  # Считываем таблицу используя pickle
+            with open(file, "rb") as f:
+                table = pickle.load(f)
+        elif type == "csv":  # Считываем таблицу используя csv
+            with open(file, "r") as f:
+                dictionary = {}
+                file_reader = csv.reader(f, delimiter=",")  # преобразуем файл в лист листов
+                table_key_dictionary = {}  # Создаем словарь атрибутов таблицы и записываем их номер
+                # Счетчик для подсчета количества строк
+                lines_count = 0  # Считаем номер строки
+                # Считывание данных из CSV файла
+                for row in file_reader:  # Проходимся по строкам таблицы
+                    if lines_count == 0:  # В первой строк находяться атрибуты, создаем ключи в словаре
+                        key_count = 0
+                        for i in row:
+                            dictionary[i] = []
+                            table_key_dictionary[key_count] = i
+                            key_count += 1
+                    else:
+                        key_count = 0
+                        for i in row:
+                            dictionary.get(table_key_dictionary.get(key_count)).append(
+                                i)  # Записываем нужный столбик нужный элемент
+                            key_count += 1
+                    lines_count += 1
+                table._data = dictionary
+                type_list = {}
+                for i in dictionary:
+                    type_list[i] = type(dictionary[i][0])
+                table._type_list = type_list
+                print(type_list)
+            return table
+    except ValueError:
+        print('Fail')
+
+table = load_table("NewFile.csv")
+table.print_table()
