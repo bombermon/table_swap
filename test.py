@@ -167,13 +167,13 @@ class Table:
     # ФУНКЦИЯ ВЫГРУЗКИ ТАБЛИЦЫ ИЗ ФАЙЛА КОНЕЦ
 
     def get_column_types(self, by_number = True): #Получаем словарь с типами столбцов
-        if by_number: # если нало нумеруем от одного
+        if by_number: # если надо нумеруем от одного
             type_list = {}
             counter = 1
             for i in self.__type_list:
                 type_list.update({counter : self.__type_list[i]})
                 counter += 1
             return type_list
-        else:
+        else: # иначе по названию колонки
             return self.__type_list
 
