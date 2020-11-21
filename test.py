@@ -166,33 +166,14 @@ class Table:
 
     # ФУНКЦИЯ ВЫГРУЗКИ ТАБЛИЦЫ ИЗ ФАЙЛА КОНЕЦ
 
-    def get_column_types(self, by_number = True):
-        if by_number:
+    def get_column_types(self, by_number = True): #Получаем словарь с типами столбцов
+        if by_number: # если надо нумеруем от одного
             type_list = {}
             counter = 1
             for i in self.__type_list:
                 type_list.update({counter : self.__type_list[i]})
                 counter += 1
             return type_list
-        else:
+        else: # иначе по названию колонки
             return self.__type_list
 
-
-
-#Тут Ойдын
-def get_rows_by_number(): #ещё не сохраняет в другой файл и тд, нужно дополнить по условиям
-    with open('table.csv') as csv_file:
-        csv_reader = list(csv.reader(csv_file))
-        number_1 = int(input('Введите номер первой строчки: '))
-        number_2 = int(input('Введите номер второй строчки: '))
-        print(csv_reader[number_1-1:number_2])
-
-
-def get_rows_by_index():
-    index = str(input('Введите название столбца: '))
-    dict = str([])
-    with open("table.csv", mode='r', newline='') as csvfile:
-        reader = csv.DictReader(csvfile, delimiter=";")
-        for row in reader:
-            output_raw = row[index]
-            print(output_raw)
