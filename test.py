@@ -67,7 +67,7 @@ class Table:
                 break
 
     def save_table(self, type='csv'):
-        data = self.
+        data = self.__data
         if type == 'csv':
             temp_table = []
             field_names = data.keys()
@@ -92,7 +92,6 @@ class Table:
 
         elif type == 'txt':
             with open('NewFile' + '.txt', 'w') as f:
-                data = temp_data
                 len_of_col = {}  # СЛОВАРЬ ДЛЯ ХРАНЕНИЯ ДЛИНЫ СТОЛБЦОВ
                 max_l = 0
                 for i in data:  # ПЕРЕБОР СЛОВАРЯ ПО ВСЕМ СЛОВАМ И ЗНАЧЕНИЯМ
