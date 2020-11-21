@@ -4,16 +4,16 @@ import re
 
 
 class Table:
-    __data = {'No': ['1999', '2', '3', '4'], 'Company': ['Ferrari', 'Lamborghini', 'porsche', 'BMW'],
+    _data = {'No': ['1999', '2', '3', '4'], 'Company': ['Ferrari', 'Lamborghini', 'porsche', 'BMW'],
               'Car Model': ['488 GTB', 'phantom', 'macan', 'X5']}
-    __type_list = {'No': str, 'Company': str,
+    _type_list = {'No': str, 'Company': str,
                    'Car Model': str}
 
     # ФУНКЦИЯ ИЗМЕНЕНИЯ ЗНАЧЕНИЙ В ОПРЕДЕЛЕННОМ СТОЛБИКЕ НАЧАЛО
     def set_values(self, values, column=0):
         try:
-            data = self.__data
-            typer = self.__type_list
+            data = self._data
+            typer = self._type_list
             field_names = []
             flag = False
             for i in data:
@@ -35,18 +35,18 @@ class Table:
     def get_values(self, column=0):
         new_values = []
         if type(column) == str:
-            new_values = self.__data[column]
+            new_values = self._data[column]
         elif type(column) == int:
             field_names = []
-            for i in self.__data:
+            for i in self._data:
                 field_names.append(i)
-            new_values = self.__data[field_names[column]]
+            new_values = self._data[field_names[column]]
         return new_values
     # ФУНКИЯ СЧИТЫВАНИЯ ЗНАЧЕНИЙ ИЗ ВНУТРЕННЕГО ПРЕДСТАВЛЕНИЯ ТАБЛИЦЫ КОНЕЦ
 
     # ФУНКЦИЯ ВЫВОДА ТАБЛИЦЫ В КОНСОЛЬ НАЧАЛО
     def print_table(self):
-        data = self.__data
+        data = self._data
         len_of_col = {}
         max_l = 0
         for i in data:  # ПЕРЕБОР СЛОВАРЯ ПО ВСЕМ СЛОВАМ И ЗНАЧЕНИЯМ
@@ -86,7 +86,7 @@ class Table:
 
     # ФУНКЦИЯ СОХРАНЕНИЯ ТАБЛИЦЫ В НОВЫЙ ФАЙЛ НАЧАЛО
     def save_table(self, type='csv'):
-        data = self.__data
+        data = self._data
         if type == 'csv':
             temp_table = []
             field_names = data.keys()
@@ -183,12 +183,12 @@ class Table:
         if by_number: # если надо нумеруем от одного
             type_list = {}
             counter = 1
-            for i in self.__type_list:
-                type_list.update({counter : self.__type_list[i]})
+            for i in self._type_list:
+                type_list.update({counter : self._type_list[i]})
                 counter += 1
             return type_list
         else: # иначе по названию колонки
-            return self.__type_list
+            return self._type_list
 
     def get_rows_by_index(self):  # не могу записать в другой файл
         self.index = str(input('Введите название столбца: '))
