@@ -55,5 +55,3 @@ class table:
         Drive the car
         """
         return "I'm driving!"
-
-t
