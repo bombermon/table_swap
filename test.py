@@ -172,13 +172,15 @@ class Table:
             print(self.csv_reader[self.number-1:self.number_2])
 
 # ФУНКЦИЯ ВЫГРУЗКИ ТАБЛИЦЫ ИЗ ФАЙЛА НАЧАЛО
-def load_table(file, Type="csv"):
+def load_table(file):
+    file_type = re.split('\.', file)
+    file_type = file_type[-1]
     table = Table()  # Храним таблицу
     try:
-        if Type == "pickle":  # Считываем таблицу используя pickle
+        if file_type == "pickle":  # Считываем таблицу используя pickle
             with open(file, "rb") as f:
                 table = pickle.load(f)
-        elif Type == "csv":  # Считываем таблицу используя csv
+        elif file_type == "csv":  # Считываем таблицу используя csv
             dictionary = {}
             with open(file, "r") as f:
                 file_reader = csv.reader(f, delimiter=",")  # преобразуем файл в лист листов
