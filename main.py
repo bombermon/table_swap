@@ -7,7 +7,7 @@ temp_data = [{'No': ['1999', '2', '3', '4'], 'Company': ['Ferrari', 'Lamborghini
               'Car Model': [float, int, bool, str]}]
 
 temp_spisok = ['1', '2', '3', '4', '5']
-aydin = 1
+
 
 def print_table():
     data = temp_data[0]
