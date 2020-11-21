@@ -177,3 +177,18 @@ class Table:
         else: # иначе по названию колонки
             return self.__type_list
 
+    def get_rows_by_index(self):  # не могу записать в другой файл
+        self.index = str(input('Введите название столбца: '))
+        self.dict = str([])
+        with open("table.csv", mode='r', newline='') as csvfile:
+            self.reader = csv.DictReader(csvfile, delimiter=";")
+            for row in self.reader:
+                self.output_raw = row[self.index]
+                print(self.output_raw)
+
+    def get_rows_by_number(self): #ещё не сохраняет в другой файл и тд, нужно дополнить по условиям
+        with open('table.csv') as csv_file:
+            self.csv_reader = list(csv.reader(csv_file))
+            self.number = int(input('Введите номер первой строчки: '))
+            self.number_2 = int(input('Введите номер второй строчки: '))
+            print(self.csv_reader[self.number-1:self.number_2])
