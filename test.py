@@ -29,7 +29,20 @@ class Table:
             data[field_names[column]] = values
         except IndexError:
             print('Ошибка: номер столбца выбран неверно!')
-    # ФУНКЦИЯ ИЗМЕНЕНИЯ ЗНАЧЕНИЙ В ОПРЕДЕЛЕННОМ СТОЛБИКЕ НАЧАЛО
+    # ФУНКЦИЯ ИЗМЕНЕНИЯ ЗНАЧЕНИЙ В ОПРЕДЕЛЕННОМ СТОЛБИКЕ КОНЕЦ
+
+    # ФУНКИЯ СЧИТЫВАНИЯ ЗНАЧЕНИЙ ИЗ ВНУТРЕННЕГО ПРЕДСТАВЛЕНИЯ ТАБЛИЦЫ НАЧАЛО
+    def get_values(self, column=0):
+        new_values = []
+        if type(column) == str:
+            new_values = self.__data[column]
+        elif type(column) == int:
+            field_names = []
+            for i in self.__data:
+                field_names.append(i)
+            new_values = self.__data[field_names[column]]
+        return new_values
+    # ФУНКИЯ СЧИТЫВАНИЯ ЗНАЧЕНИЙ ИЗ ВНУТРЕННЕГО ПРЕДСТАВЛЕНИЯ ТАБЛИЦЫ КОНЕЦ
 
     # ФУНКЦИЯ ВЫВОДА ТАБЛИЦЫ В КОНСОЛЬ НАЧАЛО
     def print_table(self):
