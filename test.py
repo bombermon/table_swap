@@ -175,15 +175,14 @@ class Table:
 
 # ФУНКЦИЯ ВЫГРУЗКИ ТАБЛИЦЫ ИЗ ФАЙЛА НАЧАЛО
 def load_table(file, type="csv"):
-    global temp_data
     table = Table()  # Храним таблицу
     try:
         if type == "pickle":  # Считываем таблицу используя pickle
             with open(file, "rb") as f:
                 table = pickle.load(f)
         elif type == "csv":  # Считываем таблицу используя csv
+            dictionary = {}
             with open(file, "r") as f:
-                dictionary = {}
                 file_reader = csv.reader(f, delimiter=",")  # преобразуем файл в лист листов
                 table_key_dictionary = {}  # Создаем словарь атрибутов таблицы и записываем их номер
                 # Счетчик для подсчета количества строк
@@ -203,13 +202,17 @@ def load_table(file, type="csv"):
                                 i)  # Записываем нужный столбик нужный элемент
                             key_count += 1
                     lines_count += 1
-                table._data = dictionary
-                type_list = {}
-                for i in dictionary:
-                    type_list[i] = type(dictionary[i][0])
-                table._type_list = type_list
-                print(type_list)
-            return table
+            table._data = dictionary
+            type_list = {}
+            for i in dictionary:
+                print(i)
+                temp = dictionary[i][0]
+                print(type(int(temp)))
+                if type(temp) == str:
+                    type_list[i] = str
+            table._type_list = type_list
+            print(type_list)
+        return table
     except ValueError:
         print('Fail')
 
