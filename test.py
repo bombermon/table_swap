@@ -2,12 +2,14 @@ import csv
 import pickle
 import re
 
+
 class Table:
     __data = {'No': ['1999', '2', '3', '4'], 'Company': ['Ferrari', 'Lamborghini', 'porsche', 'BMW'],
               'Car Model': ['488 GTB', 'phantom', 'macan', 'X5']}
     __type_list = {'No': str, 'Company': str,
-              'Car Model': str}
+                   'Car Model': str}
 
+    # ФУНКЦИЯ ИЗМЕНЕНИЯ ЗНАЧЕНИЙ В ОПРЕДЕЛЕННОМ СТОЛБИКЕ НАЧАЛО
     def set_values(self, values, column=0):
         try:
             data = self.__data
@@ -18,9 +20,8 @@ class Table:
                 field_names.append(i)
             for k in values:
                 flag = False
-                for j in typer[field_names[column]]:
-                    if type(k) == j:
-                        flag = True
+                if type(k) == typer[field_names[column]]:
+                    flag = True
                 if flag == False:
                     print('Оишбка! Вы ввели значения, не подходящие данному столбцу(', typer[field_names[column]], ')')
                     return
@@ -28,7 +29,9 @@ class Table:
             data[field_names[column]] = values
         except IndexError:
             print('Ошибка: номер столбца выбран неверно!')
+    # ФУНКЦИЯ ИЗМЕНЕНИЯ ЗНАЧЕНИЙ В ОПРЕДЕЛЕННОМ СТОЛБИКЕ НАЧАЛО
 
+    # ФУНКЦИЯ ВЫВОДА ТАБЛИЦЫ В КОНСОЛЬ НАЧАЛО
     def print_table(self):
         data = self.__data
         len_of_col = {}
@@ -66,6 +69,9 @@ class Table:
             except IndexError:
                 break
 
+    # ФУНКЦИЯ ВЫВОДА ТАБЛИЦЫ В КОНСОЛЬ НАЧАЛО
+
+    # ФУНКЦИЯ СОХРАНЕНИЯ ТАБЛИЦЫ В НОВЫЙ ФАЙЛ НАЧАЛО
     def save_table(self, type='csv'):
         data = self.__data
         if type == 'csv':
@@ -80,7 +86,6 @@ class Table:
                     if i < len(data[j]):
                         values[j] = data[j][i]
                 temp_table.append(values)
-            print(temp_table)
             with open('NewFile' + '.csv', 'w') as csvfile:
                 writer = csv.DictWriter(csvfile, fieldnames=field_names)
                 writer.writeheader()
@@ -126,3 +131,4 @@ class Table:
                         num_str += 1
                     except IndexError:
                         break
+    # ФУНКЦИЯ СОХРАНЕНИЯ ТАБЛИЦЫ В НОВЫЙ ФАЙЛ КОНЕЦ
