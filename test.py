@@ -46,3 +46,15 @@ class Table:
             except IndexError:
                 break
 
+    def get_column_types(self, by_number = True):
+        if by_number:
+            type_list = {}
+            counter = 1
+            for i in self.__type_list:
+                type_list.update({counter : self.__type_list[i]})
+                counter += 1
+            return type_list
+        else:
+            return self.__type_list
+
+
