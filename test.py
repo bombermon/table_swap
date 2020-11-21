@@ -11,17 +11,17 @@ class Table:
     def set_values(self, values, column=0):
         try:
             data = self._data
-            typer = self._type_list
+            types = self._type_list
             field_names = []
             flag = False
             for i in data:
                 field_names.append(i)
             for k in values:
                 flag = False
-                if type(k) == typer[field_names[column]]:
+                if type(k) == types[field_names[column]]:
                     flag = True
-                if flag == False:
-                    print('Оишбка! Вы ввели значения, не подходящие данному столбцу(', typer[field_names[column]], ')')
+                if not flag:
+                    print('Оишбка! Вы ввели значения, не подходящие данному столбцу(', types[field_names[column]], ')')
                     return
 
             data[field_names[column]] = values
@@ -29,7 +29,7 @@ class Table:
             print('Ошибка: номер столбца выбран неверно!')
     # ФУНКЦИЯ ИЗМЕНЕНИЯ ЗНАЧЕНИЙ В ОПРЕДЕЛЕННОМ СТОЛБИКЕ КОНЕЦ
 
-    # ФУНКИЯ СЧИТЫВАНИЯ ЗНАЧЕНИЙ ИЗ ВНУТРЕННЕГО ПРЕДСТАВЛЕНИЯ ТАБЛИЦЫ НАЧАЛО
+    # ФУНКЦИЯ СЧИТЫВАНИЯ ЗНАЧЕНИЙ ИЗ ВНУТРЕННЕГО ПРЕДСТАВЛЕНИЯ ТАБЛИЦЫ НАЧАЛО
     def get_values(self, column=0):
         new_values = []
         if type(column) == str:
@@ -40,7 +40,7 @@ class Table:
                 field_names.append(i)
             new_values = self._data[field_names[column]]
         return new_values
-    # ФУНКИЯ СЧИТЫВАНИЯ ЗНАЧЕНИЙ ИЗ ВНУТРЕННЕГО ПРЕДСТАВЛЕНИЯ ТАБЛИЦЫ КОНЕЦ
+    # ФУНКЦИЯ СЧИТЫВАНИЯ ЗНАЧЕНИЙ ИЗ ВНУТРЕННЕГО ПРЕДСТАВЛЕНИЯ ТАБЛИЦЫ КОНЕЦ
 
     # ФУНКЦИЯ ВЫВОДА ТАБЛИЦЫ В КОНСОЛЬ НАЧАЛО
     def print_table(self):
@@ -144,7 +144,7 @@ class Table:
                         break
     # ФУНКЦИЯ СОХРАНЕНИЯ ТАБЛИЦЫ В НОВЫЙ ФАЙЛ КОНЕЦ
 
-    def get_column_types(self, by_number = True): #Получаем словарь с типами столбцов
+    def get_column_types(self, by_number = True): # Получаем словарь с типами столбцов
         if by_number: # если надо нумеруем от одного
             type_list = {}
             counter = 1
@@ -164,7 +164,7 @@ class Table:
                 self.output_raw = row[self.index]
                 print(self.output_raw)
 
-    def get_rows_by_number(self): #ещё не сохраняет в другой файл и тд, нужно дополнить по условиям
+    def get_rows_by_number(self): # ещё не сохраняет в другой файл и тд, нужно дополнить по условиям
         with open('table.csv') as csv_file:
             self.csv_reader = list(csv.reader(csv_file))
             self.number = int(input('Введите номер первой строчки: '))
