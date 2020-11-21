@@ -1,11 +1,13 @@
-class table:
+import csv
+import pickle
+import re
+
+class Table:
     __data = {'No': ['1999', '2', '3', '4'], 'Company': ['Ferrari', 'Lamborghini', 'porsche', 'BMW'],
               'Car Model': ['488 GTB', 'phantom', 'macan', 'X5']}
     __type_list = {'No': [float, int, bool, str], 'Company': [float, int, bool, str],
               'Car Model': [float, int, bool, str]}
 
-    def __init__(self):
-        sosi = "bibu"
 
     def print_table(self):
         data = self.__data
@@ -44,14 +46,3 @@ class table:
             except IndexError:
                 break
 
-    def brake(self):
-        """
-        Stop the car
-        """
-        return "Braking"
-
-    def drive(self):
-        """
-        Drive the car
-        """
-        return "I'm driving!"
