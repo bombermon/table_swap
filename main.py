@@ -161,7 +161,7 @@ def set_values(values, column=0):
     except IndexError:
         print('Ошибка: номер столбца выбран неверно!')
 
-def get_rows_by_number():
+def get_rows_by_number(): #ещё не сохраняет в другой файл и тд, нужно дополнить по условиям
     with open('table.csv') as csv_file:
         csv_reader = list(csv.reader(csv_file))
         number_1 = int(input('Введите номер первой строчки: '))
