@@ -161,6 +161,22 @@ def set_values(values, column=0):
     except IndexError:
         print('Ошибка: номер столбца выбран неверно!')
 
+def get_rows_by_number(): #ещё не сохраняет в другой файл и тд, нужно дополнить по условиям
+    with open('table.csv') as csv_file:
+        csv_reader = list(csv.reader(csv_file))
+        number_1 = int(input('Введите номер первой строчки: '))
+        number_2 = int(input('Введите номер второй строчки: '))
+        print(csv_reader[number_1-1:number_2])
+
+
+def get_rows_by_index(self):
+    index = str(input('Введите название столбца: '))
+    dict = str([])
+    with open("table.csv", mode='r', newline='') as csvfile:
+        reader = csv.DictReader(csvfile, delimiter=";")
+        for row in self.reader:
+            output_raw = row[self.index]
+            print(output_raw)
 
 # ЗОНА ТЕСТОВ НАЧАЛО ЗОНА ТЕСТОВ НАЧАЛО ЗОНА ТЕСТОВ НАЧАЛО ЗОНА ТЕСТОВ НАЧАЛО ЗОНА ТЕСТОВ НАЧАЛО ЗОНА ТЕСТОВ НАЧАЛ
 
