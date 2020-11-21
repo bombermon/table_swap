@@ -133,15 +133,48 @@ class Table:
                         break
     # ФУНКЦИЯ СОХРАНЕНИЯ ТАБЛИЦЫ В НОВЫЙ ФАЙЛ КОНЕЦ
 
-    def get_column_types(self, by_number = True): #Получаем словарь с типами столбцов
-        if by_number: # если нало нумеруем от одного
+    # ФУНКЦИЯ ВЫГРУЗКИ ТАБЛИЦЫ ИЗ ФАЙЛА НАЧАЛО
+    def load_table(file, type="csv"):
+        global temp_data
+        dictionary = {}  # Храним таблицу
+        try:
+            if type == "pickle":  # Считываем таблицу используя pickle
+                dictionary = pickle.load(file)
+            elif type == "csv":  # Считываем таблицу используя csv
+                file_reader = csv.reader(file, delimiter=",")  # преобразуем файл в лист листов
+                table_key_dictionary = {}  # Создаем словарь атрибутов таблицы и записываем их номер
+                # Счетчик для подсчета количества строк
+                lines_count = 0  # Считаем номер строки
+                # Считывание данных из CSV файла
+                for row in file_reader:  # Проходимся по строкам таблицы
+                    if lines_count == 0:  # В первой строк находяться атрибуты, создаем ключи в словаре
+                        key_count = 0
+                        for i in row:
+                            dictionary[i] = []
+                            table_key_dictionary[key_count] = i
+                            key_count += 1
+                    else:
+                        key_count = 0
+                        for i in row:
+                            dictionary.get(table_key_dictionary.get(key_count)).append(
+                                i)  # Записываем нужный столбик нужный элемент
+                            key_count += 1
+                    lines_count += 1
+        except ValueError:
+            print('Fail')
+        temp_data[0] = dictionary
+
+    # ФУНКЦИЯ ВЫГРУЗКИ ТАБЛИЦЫ ИЗ ФАЙЛА КОНЕЦ
+
+    def get_column_types(self, by_number = True):
+        if by_number:
             type_list = {}
             counter = 1
             for i in self.__type_list:
                 type_list.update({counter : self.__type_list[i]})
                 counter += 1
             return type_list
-        else: # иначе по названию колонки
+        else:
             return self.__type_list
 
 
