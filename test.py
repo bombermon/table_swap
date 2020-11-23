@@ -56,15 +56,34 @@ class Table:
 
     # ФУНКЦИЯ СЧИТЫВАНИЯ ЗНАЧЕНИЙ ИЗ ВНУТРЕННЕГО ПРЕДСТАВЛЕНИЯ ТАБЛИЦЫ НАЧАЛО
     def get_values(self, column=0):
-        new_values = []
-        if type(column) == str:
-            new_values = self._data[column]
-        elif type(column) == int:
+        try:
+            new_values = []
+            if type(column) == str:
+                new_values = self._data[column]
+            elif type(column) == int:
+                field_names = []
+                for i in self._data:
+                    field_names.append(i)
+                new_values = self._data[field_names[column]]
+            return new_values
+        except IndexError:
+            print('Ошибка: номер столбца выбран неверно!')
+
+    def get_value(self, column=0):
+        try:
+            new_value = None
             field_names = []
             for i in self._data:
                 field_names.append(i)
-            new_values = self._data[field_names[column]]
-        return new_values
+            if type(column) == str:
+                for j in field_names:
+                    if j.lower() == column:
+                        new_value = j
+            elif type(column) == int:
+                new_value = field_names[column]
+            return new_value
+        except IndexError:
+            print('Ошибка: номер столбца выбран неверно!')
     # ФУНКЦИЯ СЧИТЫВАНИЯ ЗНАЧЕНИЙ ИЗ ВНУТРЕННЕГО ПРЕДСТАВЛЕНИЯ ТАБЛИЦЫ КОНЕЦ
 
     # ФУНКЦИЯ ВЫВОДА ТАБЛИЦЫ В КОНСОЛЬ НАЧАЛО
@@ -239,5 +258,7 @@ def load_table(file):
 
 vova = 'vova'
 table = load_table("NewFile.csv")
-vova = table.set_value(vova)
+table.set_value(vova)
+vova = table.get_value(column='company')
+print(vova)
 table.print_table()
