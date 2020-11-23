@@ -27,6 +27,25 @@ class Table:
             data[field_names[column]] = values
         except IndexError:
             print('Ошибка: номер столбца выбран неверно!')
+
+    def set_value(self, value, column=0):
+        data = self._data
+        types = self._type_list
+        field_names = []
+        flag = False
+        for i in data:
+            field_names.append(i)
+        flag = False
+        if type(value) == types[field_names[column]]:
+            flag = True
+        if not flag:
+            print('Оишбка! Вы ввели значения, не подходящие данному столбцу(', types[field_names[column]], ')')
+            return
+
+        self._data[value] = self._data.pop(field_names[column])
+        for j in self._data:
+            if j != value:
+                self._data[j] = self._data.pop(j)
     # ФУНКЦИЯ ИЗМЕНЕНИЯ ЗНАЧЕНИЙ В ОПРЕДЕЛЕННОМ СТОЛБИКЕ КОНЕЦ
 
     # ФУНКЦИЯ СЧИТЫВАНИЯ ЗНАЧЕНИЙ ИЗ ВНУТРЕННЕГО ПРЕДСТАВЛЕНИЯ ТАБЛИЦЫ НАЧАЛО
@@ -212,5 +231,7 @@ def load_table(file):
     except ValueError:
         print('Fail')
 
+vova = True
 table = load_table("NewFile.csv")
+vova = table.set_value(vova)
 table.print_table()
