@@ -13,7 +13,6 @@ class Table:
             data = self._data
             types = self._type_list
             field_names = []
-            flag = False
             for i in data:  # ПЕРЕВОДИМ ПЕРВУЮ СТРОКУ В ЛИСТ
                 field_names.append(i)
             for k in values:
@@ -21,8 +20,8 @@ class Table:
                 if type(k) == types[field_names[column]]:  # СВЕРЯЕМ ПРАВИЛЬНОСТЬ ТИПА НОВОГО ЗНАЧЕНИЯ
                     flag = True
                 if not flag:
-                    print('Оишбка! Вы ввели значения типа %(tvalue)s, не подходящие данному столбцу (%(ttrue)s)' %
-                          {'tvalue': type(k), 'ttrue': types[field_names[column]]})
+                    print('Оишбка! Вы ввели значения типа %(t_value)s, не подходящие данному столбцу (%(t_true)s)' %
+                          {'t_value': type(k), 't_true': types[field_names[column]]})
                     return
             if len(data[field_names[column]]) == len(values):  # ПРОВЕРЯЕМ СКОЛЬКО НАМ НУЖНО ЗАМЕНИТЬ ЗНАЧЕНИЙ ИЗ ЛИСТА
                 data[field_names[column]] = values
@@ -41,15 +40,14 @@ class Table:
             data = self._data
             types = self._type_list
             field_names = []
-            flag = False
             for i in data:  # ПЕРЕВОДИМ ПЕРВУЮ СТРОКУ В ЛИСТ
                 field_names.append(i)
             flag = False
             if type(value) == types[field_names[column]]:  # СВЕРЯЕМ ПРАВИЛЬНОСТЬ ТИПА НОВОГО ЗНАЧЕНИЯ
                 flag = True
             if not flag:
-                print('Оишбка! Вы ввели значение типа %(tvalue)s, не подходящие данному столбцу (%(ttrue)s)' %
-                      {'tvalue' : type(value), 'ttrue' : types[field_names[column]]})
+                print('Оишбка! Вы ввели значение типа %(t_value)s, не подходящие данному столбцу (%(t_true)s)' %
+                      {'t_value': type(value), 't_true': types[field_names[column]]})
 
                 return
             self._data[value] = self._data.pop(field_names[column])  # ЗАМЕНЯЕМ КЛЮЧ СЛОВАРЯ
@@ -59,6 +57,7 @@ class Table:
 
         except IndexError:  # ЕСЛИ УКАЗАН НОМЕР, КОТОРОГО НЕ СУЩЕСТВУЕТ В СЛОВАРЕ
             print('Ошибка: номер столбца выбран неверно!')
+
     # ФУНКЦИЯ ИЗМЕНЕНИЯ ЗНАЧЕНИЙ В ОПРЕДЕЛЕННОМ СТОЛБИКЕ КОНЕЦ
 
     # ФУНКЦИЯ СЧИТЫВАНИЯ ЗНАЧЕНИЙ ИЗ ВНУТРЕННЕГО ПРЕДСТАВЛЕНИЯ ТАБЛИЦЫ НАЧАЛО
@@ -91,6 +90,7 @@ class Table:
             return new_value
         except IndexError:  # ЕСЛИ УКАЗАН НОМЕР, КОТОРОГО НЕ СУЩЕСТВУЕТ В СЛОВАРЕ
             print('Ошибка: номер столбца выбран неверно!')
+
     # ФУНКЦИЯ СЧИТЫВАНИЯ ЗНАЧЕНИЙ ИЗ ВНУТРЕННЕГО ПРЕДСТАВЛЕНИЯ ТАБЛИЦЫ КОНЕЦ
 
     # ФУНКЦИЯ ВЫВОДА ТАБЛИЦЫ В КОНСОЛЬ НАЧАЛО
@@ -137,28 +137,28 @@ class Table:
     def save_table(self, file_type='csv'):
         data = self._data
 
-        if file_type == 'csv':       # ПРОВЕРЯЕМ ТИП ФАЙЛА
+        if file_type == 'csv':  # ПРОВЕРЯЕМ ТИП ФАЙЛА
             temp_table = []
             field_names = data.keys()
-            num_of_colums = 0
+            num_of_columns = 0
             for i in field_names:
-                num_of_colums = max(num_of_colums, len(data[i]))
-            for i in range(0, num_of_colums): # ПРЕОБРАЗУЕМ НАШЕ ПРЕДСТАВЛЕНИЕ В ПРЕДСТАВЛЕНИЕ УДОБНОЕ DictWriter CSV
+                num_of_columns = max(num_of_columns, len(data[i]))
+            for i in range(0, num_of_columns):  # ПРЕОБРАЗУЕМ НАШЕ ПРЕДСТАВЛЕНИЕ В ПРЕДСТАВЛЕНИЕ УДОБНОЕ DictWriter CSV
                 values = dict.fromkeys(field_names)
                 for j in field_names:
                     if i < len(data[j]):
                         values[j] = data[j][i]
                 temp_table.append(values)
-            with open('NewFile' + '.csv', 'w') as csvfile:  # ОТКРЫВАЕМ (ИЛИ СОЗДАЕМ ФАЙЛ CSV НА ЗАПИСЬ СЛОВАРЯ)
-                writer = csv.DictWriter(csvfile, fieldnames=field_names)
+            with open('NewFile' + '.csv', 'w') as csv_file:  # ОТКРЫВАЕМ (ИЛИ СОЗДАЕМ ФАЙЛ CSV НА ЗАПИСЬ СЛОВАРЯ)
+                writer = csv.DictWriter(csv_file, fieldnames=field_names)
                 writer.writeheader()
                 writer.writerows(temp_table)
 
         elif file_type == 'pickle':
-            with open('NewFile' + '.pickle', 'wb') as f: # ОТКРЫВАЕМ ФАЙЛ В ФОРМАТЕ .pickle на чтение в битах
+            with open('NewFile' + '.pickle', 'wb') as f:  # ОТКРЫВАЕМ ФАЙЛ В ФОРМАТЕ .pickle на чтение в битах
                 pickle.dump(data, f)  # ЗАПИСЫВАЕМ НАШ СЛОВАРЬ В ФАЙЛ .pickle
 
-        elif file_type == 'txt':   # ЗАПИСЬ В ФАЙЛ .txt ТАКАЯ ЖЕ КАК ВЫВОД ТАБЛИЦЫ В КОНСОЛЬ
+        elif file_type == 'txt':  # ЗАПИСЬ В ФАЙЛ .txt ТАКАЯ ЖЕ КАК ВЫВОД ТАБЛИЦЫ В КОНСОЛЬ
             with open('NewFile' + '.txt', 'w') as f:
                 len_of_col = {}  # СЛОВАРЬ ДЛЯ ХРАНЕНИЯ ДЛИНЫ СТОЛБЦОВ
                 max_l = 0
@@ -194,34 +194,36 @@ class Table:
                         num_str += 1
                     except IndexError:
                         break
+
     # ФУНКЦИЯ СОХРАНЕНИЯ ТАБЛИЦЫ В НОВЫЙ ФАЙЛ КОНЕЦ
 
-    def get_column_types(self, by_number = True): # Получаем словарь с типами столбцов
-        if by_number: # если надо нумеруем от одного
+    def get_column_types(self, by_number=True):  # Получаем словарь с типами столбцов
+        if by_number:  # если надо нумеруем от одного
             type_list = {}
             counter = 1
             for i in self._type_list:
-                type_list.update({counter : self._type_list[i]})
+                type_list.update({counter: self._type_list[i]})
                 counter += 1
             return type_list
-        else: # иначе по названию колонки
+        else:  # иначе по названию колонки
             return self._type_list
 
     def get_rows_by_index(self):  # не могу записать в другой файл
         self.index = str(input('Введите название столбца: '))
         self.dict = str([])
-        with open("table.csv", mode='r', newline='') as csvfile:
-            self.reader = csv.DictReader(csvfile, delimiter=";")
+        with open("table.csv", mode='r', newline='') as csv_file:
+            self.reader = csv.DictReader(csv_file, delimiter=";")
             for row in self.reader:
                 self.output_raw = row[self.index]
                 print(self.output_raw)
 
-    def get_rows_by_number(self): # ещё не сохраняет в другой файл и тд, нужно дополнить по условиям
+    def get_rows_by_number(self):  # ещё не сохраняет в другой файл и тд, нужно дополнить по условиям
         with open('table.csv') as csv_file:
             self.csv_reader = list(csv.reader(csv_file))
             self.number = int(input('Введите номер первой строчки: '))
             self.number_2 = int(input('Введите номер второй строчки: '))
-            print(self.csv_reader[self.number-1:self.number_2])
+            print(self.csv_reader[self.number - 1:self.number_2])
+
 
 # ФУНКЦИЯ ВЫГРУЗКИ ТАБЛИЦЫ ИЗ ФАЙЛА НАЧАЛО
 def load_table(file):
@@ -264,7 +266,8 @@ def load_table(file):
     except ValueError:
         print('Fail')
 
-vova = ['9','7']
+
+vova = ['9', '7']
 table = load_table("NewFile.csv")
 table.set_values(vova)
 vova = table.get_value(column=0)
