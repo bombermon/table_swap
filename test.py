@@ -14,19 +14,26 @@ class Table:
             types = self._type_list
             field_names = []
             flag = False
-            for i in data:
+            for i in data:  # ПЕРЕВОДИМ ПЕРВУЮ СТРОКУ В ЛИСТ
                 field_names.append(i)
             for k in values:
                 flag = False
-                if type(k) == types[field_names[column]]:
+                if type(k) == types[field_names[column]]:  # СВЕРЯЕМ ПРАВИЛЬНОСТЬ ТИПА НОВОГО ЗНАЧЕНИЯ
                     flag = True
                 if not flag:
                     print('Оишбка! Вы ввели значения типа %(tvalue)s, не подходящие данному столбцу (%(ttrue)s)' %
                           {'tvalue': type(k), 'ttrue': types[field_names[column]]})
                     return
-
-            data[field_names[column]] = values
-        except IndexError:
+            if len(data[field_names[column]]) == len(values):  # ПРОВЕРЯЕМ СКОЛЬКО НАМ НУЖНО ЗАМЕНИТЬ ЗНАЧЕНИЙ ИЗ ЛИСТА
+                data[field_names[column]] = values
+            else:
+                n = 0
+                for j in values:
+                    if n == len(values):
+                        return
+                    data[field_names[column]][n] = j  # ЗАМЕНЯЕМ ПРОШЛЫЙ ЛИСТ В НОВЫЙ ЛИСТ
+                    n += 1
+        except IndexError:  # ЕСЛИ УКАЗАН НОМЕР, КОТОРОГО НЕ СУЩЕСТВУЕТ В СЛОВАРЕ
             print('Ошибка: номер столбца выбран неверно!')
 
     def set_value(self, value, column=0):
@@ -35,22 +42,22 @@ class Table:
             types = self._type_list
             field_names = []
             flag = False
-            for i in data:
+            for i in data:  # ПЕРЕВОДИМ ПЕРВУЮ СТРОКУ В ЛИСТ
                 field_names.append(i)
             flag = False
-            if type(value) == types[field_names[column]]:
+            if type(value) == types[field_names[column]]:  # СВЕРЯЕМ ПРАВИЛЬНОСТЬ ТИПА НОВОГО ЗНАЧЕНИЯ
                 flag = True
             if not flag:
                 print('Оишбка! Вы ввели значение типа %(tvalue)s, не подходящие данному столбцу (%(ttrue)s)' %
                       {'tvalue' : type(value), 'ttrue' : types[field_names[column]]})
 
                 return
-
-            self._data[value] = self._data.pop(field_names[column])
+            self._data[value] = self._data.pop(field_names[column])  # ЗАМЕНЯЕМ КЛЮЧ СЛОВАРЯ
             for j in self._data:
                 if j != value:
-                    self._data[j] = self._data.pop(j)
-        except IndexError:
+                    self._data[j] = self._data.pop(j)  # ВЫСТРАИВАЕМ СЛОВАРЬ ОБРАТНО В ПРАВИЛЬНЫЙ ПОРЯДОК
+
+        except IndexError:  # ЕСЛИ УКАЗАН НОМЕР, КОТОРОГО НЕ СУЩЕСТВУЕТ В СЛОВАРЕ
             print('Ошибка: номер столбца выбран неверно!')
     # ФУНКЦИЯ ИЗМЕНЕНИЯ ЗНАЧЕНИЙ В ОПРЕДЕЛЕННОМ СТОЛБИКЕ КОНЕЦ
 
@@ -66,23 +73,23 @@ class Table:
                     field_names.append(i)
                 new_values = self._data[field_names[column]]
             return new_values
-        except IndexError:
+        except IndexError:  # ЕСЛИ УКАЗАН НОМЕР, КОТОРОГО НЕ СУЩЕСТВУЕТ В СЛОВАРЕ
             print('Ошибка: номер столбца выбран неверно!')
 
     def get_value(self, column=0):
         try:
             new_value = None
             field_names = []
-            for i in self._data:
+            for i in self._data:  # ПЕРЕВОДИМ ПЕРВУЮ СТРОКУ В ЛИСТ
                 field_names.append(i)
-            if type(column) == str:
+            if type(column) == str:  # ЕСЛИ УКАЗАНО НАЗВАНИЕ КОЛОНКИ
                 for j in field_names:
                     if j.lower() == column:
                         new_value = j
-            elif type(column) == int:
+            elif type(column) == int:  # ЕСЛИ УКАЗАН НОМЕР КОЛОНКИ
                 new_value = field_names[column]
             return new_value
-        except IndexError:
+        except IndexError:  # ЕСЛИ УКАЗАН НОМЕР, КОТОРОГО НЕ СУЩЕСТВУЕТ В СЛОВАРЕ
             print('Ошибка: номер столбца выбран неверно!')
     # ФУНКЦИЯ СЧИТЫВАНИЯ ЗНАЧЕНИЙ ИЗ ВНУТРЕННЕГО ПРЕДСТАВЛЕНИЯ ТАБЛИЦЫ КОНЕЦ
 
@@ -127,30 +134,31 @@ class Table:
     # ФУНКЦИЯ ВЫВОДА ТАБЛИЦЫ В КОНСОЛЬ НАЧАЛО
 
     # ФУНКЦИЯ СОХРАНЕНИЯ ТАБЛИЦЫ В НОВЫЙ ФАЙЛ НАЧАЛО
-    def save_table(self):
+    def save_table(self, file_type='csv'):
         data = self._data
-        if type == 'csv':
+
+        if file_type == 'csv':       # ПРОВЕРЯЕМ ТИП ФАЙЛА
             temp_table = []
             field_names = data.keys()
             num_of_colums = 0
             for i in field_names:
                 num_of_colums = max(num_of_colums, len(data[i]))
-            for i in range(0, num_of_colums):
+            for i in range(0, num_of_colums): # ПРЕОБРАЗУЕМ НАШЕ ПРЕДСТАВЛЕНИЕ В ПРЕДСТАВЛЕНИЕ УДОБНОЕ DictWriter CSV
                 values = dict.fromkeys(field_names)
                 for j in field_names:
                     if i < len(data[j]):
                         values[j] = data[j][i]
                 temp_table.append(values)
-            with open('NewFile' + '.csv', 'w') as csvfile:
+            with open('NewFile' + '.csv', 'w') as csvfile:  # ОТКРЫВАЕМ (ИЛИ СОЗДАЕМ ФАЙЛ CSV НА ЗАПИСЬ СЛОВАРЯ)
                 writer = csv.DictWriter(csvfile, fieldnames=field_names)
                 writer.writeheader()
                 writer.writerows(temp_table)
 
-        elif type == 'pickle':
-            with open('NewFile' + '.pickle', 'wb') as f:
-                pickle.dump(data, f)
+        elif file_type == 'pickle':
+            with open('NewFile' + '.pickle', 'wb') as f: # ОТКРЫВАЕМ ФАЙЛ В ФОРМАТЕ .pickle на чтение в битах
+                pickle.dump(data, f)  # ЗАПИСЫВАЕМ НАШ СЛОВАРЬ В ФАЙЛ .pickle
 
-        elif type == 'txt':
+        elif file_type == 'txt':   # ЗАПИСЬ В ФАЙЛ .txt ТАКАЯ ЖЕ КАК ВЫВОД ТАБЛИЦЫ В КОНСОЛЬ
             with open('NewFile' + '.txt', 'w') as f:
                 len_of_col = {}  # СЛОВАРЬ ДЛЯ ХРАНЕНИЯ ДЛИНЫ СТОЛБЦОВ
                 max_l = 0
@@ -256,9 +264,9 @@ def load_table(file):
     except ValueError:
         print('Fail')
 
-vova = 'vova'
+vova = ['9','7']
 table = load_table("NewFile.csv")
-table.set_value(vova)
-vova = table.get_value(column='company')
+table.set_values(vova)
+vova = table.get_value(column=0)
 print(vova)
 table.print_table()
