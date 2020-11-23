@@ -39,7 +39,9 @@ class Table:
         if type(value) == types[field_names[column]]:
             flag = True
         if not flag:
-            print('Оишбка! Вы ввели значения, не подходящие данному столбцу(', types[field_names[column]], ')')
+            print('Оишбка! Вы ввели значение типа %(tvalue)s, не подходящие данному столбцу (%(ttrue)s)' %
+                  {'tvalue' : type(value), 'ttrue' : types[field_names[column]]})
+
             return
 
         self._data[value] = self._data.pop(field_names[column])
