@@ -21,7 +21,8 @@ class Table:
                 if type(k) == types[field_names[column]]:
                     flag = True
                 if not flag:
-                    print('Оишбка! Вы ввели значения, не подходящие данному столбцу(', types[field_names[column]], ')')
+                    print('Оишбка! Вы ввели значения типа %(tvalue)s, не подходящие данному столбцу (%(ttrue)s)' %
+                          {'tvalue': type(k), 'ttrue': types[field_names[column]]})
                     return
 
             data[field_names[column]] = values
@@ -29,25 +30,28 @@ class Table:
             print('Ошибка: номер столбца выбран неверно!')
 
     def set_value(self, value, column=0):
-        data = self._data
-        types = self._type_list
-        field_names = []
-        flag = False
-        for i in data:
-            field_names.append(i)
-        flag = False
-        if type(value) == types[field_names[column]]:
-            flag = True
-        if not flag:
-            print('Оишбка! Вы ввели значение типа %(tvalue)s, не подходящие данному столбцу (%(ttrue)s)' %
-                  {'tvalue' : type(value), 'ttrue' : types[field_names[column]]})
+        try:
+            data = self._data
+            types = self._type_list
+            field_names = []
+            flag = False
+            for i in data:
+                field_names.append(i)
+            flag = False
+            if type(value) == types[field_names[column]]:
+                flag = True
+            if not flag:
+                print('Оишбка! Вы ввели значение типа %(tvalue)s, не подходящие данному столбцу (%(ttrue)s)' %
+                      {'tvalue' : type(value), 'ttrue' : types[field_names[column]]})
 
-            return
+                return
 
-        self._data[value] = self._data.pop(field_names[column])
-        for j in self._data:
-            if j != value:
-                self._data[j] = self._data.pop(j)
+            self._data[value] = self._data.pop(field_names[column])
+            for j in self._data:
+                if j != value:
+                    self._data[j] = self._data.pop(j)
+        except IndexError:
+            print('Ошибка: номер столбца выбран неверно!')
     # ФУНКЦИЯ ИЗМЕНЕНИЯ ЗНАЧЕНИЙ В ОПРЕДЕЛЕННОМ СТОЛБИКЕ КОНЕЦ
 
     # ФУНКЦИЯ СЧИТЫВАНИЯ ЗНАЧЕНИЙ ИЗ ВНУТРЕННЕГО ПРЕДСТАВЛЕНИЯ ТАБЛИЦЫ НАЧАЛО
@@ -233,7 +237,7 @@ def load_table(file):
     except ValueError:
         print('Fail')
 
-vova = True
+vova = 'vova'
 table = load_table("NewFile.csv")
 vova = table.set_value(vova)
 table.print_table()
