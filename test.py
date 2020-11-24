@@ -57,15 +57,7 @@ class Table:
                 print('Оишбка! Вы ввели значение типа %(t_value)s, не подходящие данному столбцу (%(t_true)s)' %
                       {'t_value': type(value), 't_true': types[field_names[column]]})
                 return
-            # ЗДЕСЬ ЕСТЬ ДВЕ ВЕРСИИ ПРОГРАММЫ, ЧТОБЫ ИХ МЕНЯТЬ НУЖНО ПОМЕНЯТЬ ПЕРЕМЕННУЮ ver (0 or 1)
-            ver = 1  # МЕНЯТЬ ЭТО !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            if ver == 0:  # МЕНЯЕМ ТОЛЬКО КЛЮЧ СЛОВАРЯ
-                self._data[value] = self._data.pop(field_names[column])  # ЗАМЕНЯЕМ КЛЮЧ СЛОВАРЯ
-                for j in self._data:
-                    if j != value:
-                        self._data[j] = self._data.pop(j)  # ВЫСТРАИВАЕМ СЛОВАРЬ ОБРАТНО В ПРАВИЛЬНЫЙ ПОРЯДОК
-            elif ver == 1:  # МЕНЯЕМ ТОЛЬКО ЗНАЧЕНИЕ СЛОВАРЯ
-                self._data[field_names[column]][0] = value
+            self._data[field_names[column]][0] = value
         except IndexError:  # ЕСЛИ УКАЗАН НОМЕР, КОТОРОГО НЕ СУЩЕСТВУЕТ В СЛОВАРЕ
             print('Ошибка: номер столбца выбран неверно!')
         except ValueError:  # ЕСЛИ НЕПРАВИЛЬНО УКАЗАЛИ ТЕКСТОВОЕ ЗНАЧЕНИЕ
@@ -111,6 +103,7 @@ class Table:
     def print_table(self):
         data = self._data
         len_of_col = {}
+        full_len = 0
         max_l = 0
         for i in data:  # ПЕРЕБОР СЛОВАРЯ ПО ВСЕМ СЛОВАМ И ЗНАЧЕНИЯМ
             if len(i) > max_l:  # НАХОЖДЕНИЕ САМОГО ДЛИННОГО СЛОВА
@@ -119,8 +112,13 @@ class Table:
                 if len(j) > max_l:
                     max_l = len(j)
             len_of_col[i] = max_l
-
+            full_len += max_l
+        print('|', end='')
+        for j in range(full_len + 2):
+            print('-', end='')
+        print('|')
         field_names_len = {}
+        print('|', end='')
         for i in len_of_col:  # ФОРМИРОВАНИЕ РОВНЫХ СТОЛБЦОВ
             temp_key = i
             if len(i) < len_of_col[i]:
@@ -136,6 +134,7 @@ class Table:
                 if not any(data):
                     print('Данных нет!')
                     return
+                print('|', end='')
                 for i in data:  # ДОБАВЛЕНИЕ ПРОБЕЛОВ ДЛЯ РОВНЫХ СТОЛБЦОВ
                     temp = data[i][num_str]
                     if len(temp) < len_of_col[i]:
@@ -146,6 +145,9 @@ class Table:
                 print()
                 num_str += 1
         except IndexError:
+            for j in range(full_len+2):
+                print('-', end='')
+            print('|')
             return
 
     # ФУНКЦИЯ ВЫВОДА ТАБЛИЦЫ В КОНСОЛЬ НАЧАЛО
@@ -179,6 +181,7 @@ class Table:
             with open(name + '.txt', 'w') as f:
                 len_of_col = {}  # СЛОВАРЬ ДЛЯ ХРАНЕНИЯ ДЛИНЫ СТОЛБЦОВ
                 max_l = 0
+                full_len = 0
                 for i in data:  # ПЕРЕБОР СЛОВАРЯ ПО ВСЕМ СЛОВАМ И ЗНАЧЕНИЯМ
                     if len(i) > max_l:  # НАХОЖДЕНИЕ САМОГО ДЛИННОГО СЛОВА
                         max_l = len(i)
@@ -186,8 +189,13 @@ class Table:
                         if len(j) > max_l:
                             max_l = len(j)
                     len_of_col[i] = max_l  # ЗАПОЛНЕНИЯ СЛОВАРЯ МАКСИМАЛЬНЫМИ ДЛИНАМИ
-
+                    full_len += max_l
+                print('|', file=f, end='')
+                for j in range(full_len + 2):
+                    print('-', file=f, end='')
+                print('|', file=f)
                 field_names_len = {}
+                print('|', file=f, end='')
                 for i in len_of_col:  # ФОРМИРОВАНИЕ РОВНЫХ СТОЛБЦОВ
                     temp_key = i
                     if len(i) < len_of_col[i]:
@@ -200,6 +208,7 @@ class Table:
                 num_str = 0
                 while True:
                     try:
+                        print('|', file=f, end='')
                         for i in data:  # ДОБАВЛЕНИЕ ПРОБЕЛОВ ДЛЯ РОВНЫХ СТОЛБЦОВ
                             temp = data[i][num_str]
                             if len(temp) < len_of_col[i]:
@@ -210,6 +219,9 @@ class Table:
                         print(file=f)
                         num_str += 1
                     except IndexError:
+                        for j in range(full_len + 2):
+                            print('-', file=f, end='')
+                        print('|', file=f)
                         break
 
     # ФУНКЦИЯ СОХРАНЕНИЯ ТАБЛИЦЫ В НОВЫЙ ФАЙЛ КОНЕЦ
@@ -234,12 +246,12 @@ class Table:
                 self.output_raw = row[self.index]
                 print(self.output_raw)
 
-    def get_rows_by_number(self):  # ещё не сохраняет в другой файл и тд, нужно дополнить по условиям
-        with open('table.csv') as csv_file:
-            self.csv_reader = list(csv.reader(csv_file))
-            self.number = int(input('Введите номер первой строчки: '))
-            self.number_2 = int(input('Введите номер второй строчки: '))
-            print(self.csv_reader[self.number - 1:self.number_2])
+        def get_rows_by_number(self):  # ещё не сохраняет в другой файл и тд, нужно дополнить по условиям
+            with open('table.csv') as csv_file:
+                self.csv_reader = list(csv.reader(csv_file))
+                self.number = int(input('Введите номер первой строчки: '))
+                self.number_2 = int(input('Введите номер второй строчки: '))
+                print(self.csv_reader[self.number - 1:self.number_2])
 
 
 # ФУНКЦИЯ ВЫГРУЗКИ ТАБЛИЦЫ ИЗ ФАЙЛА НАЧАЛО
@@ -289,10 +301,10 @@ def load_table(file):
         print('Неверные значения в таблице!')
 
 
-vova = ['1','2','3']
-table = load_table("FileToTest.csv")
+vova = '1'
+table = load_table("NewFile.csv")
 table.set_value(vova)
 vova = table.get_value(column=0)
 print('get value = %s' % vova)
 table.print_table()
-table.save_table()
+table.save_table('NewTable1', file_type='txt')
