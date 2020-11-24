@@ -151,7 +151,7 @@ class Table:
     # ФУНКЦИЯ ВЫВОДА ТАБЛИЦЫ В КОНСОЛЬ НАЧАЛО
 
     # ФУНКЦИЯ СОХРАНЕНИЯ ТАБЛИЦЫ В НОВЫЙ ФАЙЛ НАЧАЛО
-    def save_table(self, file_type='csv'):
+    def save_table(self, name, file_type='csv'):
         data = self._data
 
         if file_type == 'csv':  # ПРОВЕРЯЕМ ТИП ФАЙЛА
@@ -166,17 +166,17 @@ class Table:
                     if i < len(data[j]):
                         values[j] = data[j][i]
                 temp_table.append(values)
-            with open('NewFile' + '.csv', 'w') as csv_file:  # ОТКРЫВАЕМ (ИЛИ СОЗДАЕМ ФАЙЛ CSV НА ЗАПИСЬ СЛОВАРЯ)
+            with open(name + '.csv', 'w') as csv_file:  # ОТКРЫВАЕМ (ИЛИ СОЗДАЕМ ФАЙЛ CSV НА ЗАПИСЬ СЛОВАРЯ)
                 writer = csv.DictWriter(csv_file, fieldnames=field_names)
                 writer.writeheader()
                 writer.writerows(temp_table)
 
         elif file_type == 'pickle':
-            with open('NewFile' + '.pickle', 'wb') as f:  # ОТКРЫВАЕМ ФАЙЛ В ФОРМАТЕ .pickle на чтение в битах
+            with open(name + '.pickle', 'wb') as f:  # ОТКРЫВАЕМ ФАЙЛ В ФОРМАТЕ .pickle на чтение в битах
                 pickle.dump(data, f)  # ЗАПИСЫВАЕМ НАШ СЛОВАРЬ В ФАЙЛ .pickle
 
         elif file_type == 'txt':  # ЗАПИСЬ В ФАЙЛ .txt ТАКАЯ ЖЕ КАК ВЫВОД ТАБЛИЦЫ В КОНСОЛЬ
-            with open('NewFile' + '.txt', 'w') as f:
+            with open(name + '.txt', 'w') as f:
                 len_of_col = {}  # СЛОВАРЬ ДЛЯ ХРАНЕНИЯ ДЛИНЫ СТОЛБЦОВ
                 max_l = 0
                 for i in data:  # ПЕРЕБОР СЛОВАРЯ ПО ВСЕМ СЛОВАМ И ЗНАЧЕНИЯМ
@@ -295,3 +295,4 @@ table.set_value(vova)
 vova = table.get_value(column=0)
 print('get value = %s' % vova)
 table.print_table()
+table.save_table()
