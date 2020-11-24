@@ -15,6 +15,9 @@ class Table:
             field_names = []
             for i in data:  # ПЕРЕВОДИМ ПЕРВУЮ СТРОКУ В ЛИСТ
                 field_names.append(i)
+            if type(column) == str:
+                column = field_names.index(column)
+
             for k in values:
                 flag = False
                 if type(k) == types[field_names[column]]:  # СВЕРЯЕМ ПРАВИЛЬНОСТЬ ТИПА НОВОГО ЗНАЧЕНИЯ
@@ -34,6 +37,8 @@ class Table:
                     n += 1
         except IndexError:  # ЕСЛИ УКАЗАН НОМЕР, КОТОРОГО НЕ СУЩЕСТВУЕТ В СЛОВАРЕ
             print('Ошибка: номер столбца выбран неверно!')
+        except ValueError: # ЕСЛИ НЕПРАВИЛЬНО УКАЗАЛИ ТЕКСТОВОЕ ЗНАЧЕНИЕ
+            print('Ошибка: имя столбца указано неверно')
 
     def set_value(self, value, column=0):
         try:
@@ -42,21 +47,28 @@ class Table:
             field_names = []
             for i in data:  # ПЕРЕВОДИМ ПЕРВУЮ СТРОКУ В ЛИСТ
                 field_names.append(i)
+            if type(column) == str:
+                column = field_names.index(column)
             flag = False
             if type(value) == types[field_names[column]]:  # СВЕРЯЕМ ПРАВИЛЬНОСТЬ ТИПА НОВОГО ЗНАЧЕНИЯ
                 flag = True
             if not flag:
                 print('Оишбка! Вы ввели значение типа %(t_value)s, не подходящие данному столбцу (%(t_true)s)' %
                       {'t_value': type(value), 't_true': types[field_names[column]]})
-
                 return
-            self._data[value] = self._data.pop(field_names[column])  # ЗАМЕНЯЕМ КЛЮЧ СЛОВАРЯ
-            for j in self._data:
-                if j != value:
-                    self._data[j] = self._data.pop(j)  # ВЫСТРАИВАЕМ СЛОВАРЬ ОБРАТНО В ПРАВИЛЬНЫЙ ПОРЯДОК
-
+            # ЗДЕСЬ ЕСТЬ ДВЕ ВЕРСИИ ПРОГРАММЫ, ЧТОБЫ ИХ МЕНЯТЬ НУЖНО ПОМЕНЯТЬ ПЕРЕМЕННУЮ ver (0 or 1)
+            ver = 1  # МЕНЯТЬ ЭТО !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            if ver == 0: # МЕНЯЕМ ТОЛЬКО КЛЮЧ СЛОВАРЯ
+                self._data[value] = self._data.pop(field_names[column])  # ЗАМЕНЯЕМ КЛЮЧ СЛОВАРЯ
+                for j in self._data:
+                    if j != value:
+                        self._data[j] = self._data.pop(j)  # ВЫСТРАИВАЕМ СЛОВАРЬ ОБРАТНО В ПРАВИЛЬНЫЙ ПОРЯДОК
+            elif ver == 1:  # МЕНЯЕМ ТОЛЬКО ЗНАЧЕНИЕ СЛОВАРЯ
+                self._data[field_names[column]][0] = value
         except IndexError:  # ЕСЛИ УКАЗАН НОМЕР, КОТОРОГО НЕ СУЩЕСТВУЕТ В СЛОВАРЕ
             print('Ошибка: номер столбца выбран неверно!')
+        except ValueError: # ЕСЛИ НЕПРАВИЛЬНО УКАЗАЛИ ТЕКСТОВОЕ ЗНАЧЕНИЕ
+            print('Ошибка: имя столбца указано неверно')
 
     # ФУНКЦИЯ ИЗМЕНЕНИЯ ЗНАЧЕНИЙ В ОПРЕДЕЛЕННОМ СТОЛБИКЕ КОНЕЦ
 
@@ -74,6 +86,8 @@ class Table:
             return new_values
         except IndexError:  # ЕСЛИ УКАЗАН НОМЕР, КОТОРОГО НЕ СУЩЕСТВУЕТ В СЛОВАРЕ
             print('Ошибка: номер столбца выбран неверно!')
+        except ValueError: # ЕСЛИ НЕПРАВИЛЬНО УКАЗАЛИ ТЕКСТОВОЕ ЗНАЧЕНИЕ
+            print('Ошибка: имя столбца указано неверно')
 
     def get_value(self, column=0):
         try:
@@ -81,15 +95,14 @@ class Table:
             field_names = []
             for i in self._data:  # ПЕРЕВОДИМ ПЕРВУЮ СТРОКУ В ЛИСТ
                 field_names.append(i)
-            if type(column) == str:  # ЕСЛИ УКАЗАНО НАЗВАНИЕ КОЛОНКИ
-                for j in field_names:
-                    if j.lower() == column:
-                        new_value = j
-            elif type(column) == int:  # ЕСЛИ УКАЗАН НОМЕР КОЛОНКИ
-                new_value = field_names[column]
+            if type(column) == str:
+                column = field_names.index(column)
+            new_value = self._data[field_names[column]][0]
             return new_value
         except IndexError:  # ЕСЛИ УКАЗАН НОМЕР, КОТОРОГО НЕ СУЩЕСТВУЕТ В СЛОВАРЕ
             print('Ошибка: номер столбца выбран неверно!')
+        except ValueError: # ЕСЛИ НЕПРАВИЛЬНО УКАЗАЛИ ТЕКСТОВОЕ ЗНАЧЕНИЕ
+            print('Ошибка: имя столбца указано неверно')
 
     # ФУНКЦИЯ СЧИТЫВАНИЯ ЗНАЧЕНИЙ ИЗ ВНУТРЕННЕГО ПРЕДСТАВЛЕНИЯ ТАБЛИЦЫ КОНЕЦ
 
@@ -267,9 +280,9 @@ def load_table(file):
         print('Fail')
 
 
-vova = ['9', '7']
+vova = 'vova'
 table = load_table("NewFile.csv")
-table.set_values(vova)
-vova = table.get_value(column=0)
-print(vova)
+table.set_value(vova)
+vova = table.get_value(column='No')
+print('get value = %s' % vova)
 table.print_table()
