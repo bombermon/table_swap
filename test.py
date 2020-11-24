@@ -1,6 +1,7 @@
 import csv
 import pickle
 import re
+import os.path
 
 
 class Table:
@@ -37,7 +38,7 @@ class Table:
                     n += 1
         except IndexError:  # ЕСЛИ УКАЗАН НОМЕР, КОТОРОГО НЕ СУЩЕСТВУЕТ В СЛОВАРЕ
             print('Ошибка: номер столбца выбран неверно!')
-        except ValueError: # ЕСЛИ НЕПРАВИЛЬНО УКАЗАЛИ ТЕКСТОВОЕ ЗНАЧЕНИЕ
+        except ValueError:  # ЕСЛИ НЕПРАВИЛЬНО УКАЗАЛИ ТЕКСТОВОЕ ЗНАЧЕНИЕ
             print('Ошибка: имя столбца указано неверно')
 
     def set_value(self, value, column=0):
@@ -58,7 +59,7 @@ class Table:
                 return
             # ЗДЕСЬ ЕСТЬ ДВЕ ВЕРСИИ ПРОГРАММЫ, ЧТОБЫ ИХ МЕНЯТЬ НУЖНО ПОМЕНЯТЬ ПЕРЕМЕННУЮ ver (0 or 1)
             ver = 1  # МЕНЯТЬ ЭТО !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            if ver == 0: # МЕНЯЕМ ТОЛЬКО КЛЮЧ СЛОВАРЯ
+            if ver == 0:  # МЕНЯЕМ ТОЛЬКО КЛЮЧ СЛОВАРЯ
                 self._data[value] = self._data.pop(field_names[column])  # ЗАМЕНЯЕМ КЛЮЧ СЛОВАРЯ
                 for j in self._data:
                     if j != value:
@@ -67,7 +68,7 @@ class Table:
                 self._data[field_names[column]][0] = value
         except IndexError:  # ЕСЛИ УКАЗАН НОМЕР, КОТОРОГО НЕ СУЩЕСТВУЕТ В СЛОВАРЕ
             print('Ошибка: номер столбца выбран неверно!')
-        except ValueError: # ЕСЛИ НЕПРАВИЛЬНО УКАЗАЛИ ТЕКСТОВОЕ ЗНАЧЕНИЕ
+        except ValueError:  # ЕСЛИ НЕПРАВИЛЬНО УКАЗАЛИ ТЕКСТОВОЕ ЗНАЧЕНИЕ
             print('Ошибка: имя столбца указано неверно')
 
     # ФУНКЦИЯ ИЗМЕНЕНИЯ ЗНАЧЕНИЙ В ОПРЕДЕЛЕННОМ СТОЛБИКЕ КОНЕЦ
@@ -86,7 +87,7 @@ class Table:
             return new_values
         except IndexError:  # ЕСЛИ УКАЗАН НОМЕР, КОТОРОГО НЕ СУЩЕСТВУЕТ В СЛОВАРЕ
             print('Ошибка: номер столбца выбран неверно!')
-        except ValueError: # ЕСЛИ НЕПРАВИЛЬНО УКАЗАЛИ ТЕКСТОВОЕ ЗНАЧЕНИЕ
+        except ValueError:  # ЕСЛИ НЕПРАВИЛЬНО УКАЗАЛИ ТЕКСТОВОЕ ЗНАЧЕНИЕ
             print('Ошибка: имя столбца указано неверно')
 
     def get_value(self, column=0):
@@ -101,7 +102,7 @@ class Table:
             return new_value
         except IndexError:  # ЕСЛИ УКАЗАН НОМЕР, КОТОРОГО НЕ СУЩЕСТВУЕТ В СЛОВАРЕ
             print('Ошибка: номер столбца выбран неверно!')
-        except ValueError: # ЕСЛИ НЕПРАВИЛЬНО УКАЗАЛИ ТЕКСТОВОЕ ЗНАЧЕНИЕ
+        except ValueError:  # ЕСЛИ НЕПРАВИЛЬНО УКАЗАЛИ ТЕКСТОВОЕ ЗНАЧЕНИЕ
             print('Ошибка: имя столбца указано неверно')
 
     # ФУНКЦИЯ СЧИТЫВАНИЯ ЗНАЧЕНИЙ ИЗ ВНУТРЕННЕГО ПРЕДСТАВЛЕНИЯ ТАБЛИЦЫ КОНЕЦ
@@ -240,9 +241,17 @@ class Table:
 
 # ФУНКЦИЯ ВЫГРУЗКИ ТАБЛИЦЫ ИЗ ФАЙЛА НАЧАЛО
 def load_table(file):
+    table = Table()  # Храним таблицу
+    state_file = os.path.isfile(file)
+
+    if not state_file:
+        print('Вы ввели название таблицы (%s), которой не существует. Мы завели таблицу сами.' % file)
+        table._data = {'No': ['1999', '2', '3', '4'], 'Company': ['Ferrari', 'Lamborghini', 'porsche', 'BMW'],
+                       'Car Model': ['488 GTB', 'phantom', 'macan', 'X5']}
+        table._type_list = {'No': str, 'Company': str, 'Car Model': str}
     file_type = re.split('\.', file)
     file_type = file_type[-1]
-    table = Table()  # Храним таблицу
+
     try:
         if file_type == "pickle":  # Считываем таблицу используя pickle
             with open(file, "rb") as f:
@@ -283,6 +292,6 @@ def load_table(file):
 vova = 'vova'
 table = load_table("NewFile.csv")
 table.set_value(vova)
-vova = table.get_value(column='No')
+vova = table.get_value(column=0)
 print('get value = %s' % vova)
 table.print_table()
