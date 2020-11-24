@@ -2,7 +2,7 @@ import csv
 import pickle
 import re
 import os.path
-import pandas as pd
+
 
 class Table:
     _data = {}
@@ -145,7 +145,7 @@ class Table:
                 print()
                 num_str += 1
         except IndexError:
-            for j in range(full_len+2):
+            for j in range(full_len + 2):
                 print('-', end='')
             print('|')
             return
@@ -237,17 +237,26 @@ class Table:
         else:  # иначе по названию колонки
             return self._type_list
 
-    def get_raws_by_index(self):
-        self.keyword = str(input('Введите слово: '))
-        self.new_frame = pd.DataFrame(columns=self._data[self.keyword])
-        print(self.new_frame)
 
-        def get_rows_by_number(self):  # ещё не сохраняет в другой файл и тд, нужно дополнить по условиям
-            with open('table.csv') as csv_file:
-                self.csv_reader = list(csv.reader(csv_file))
-                self.number = int(input('Введите номер первой строчки: '))
-                self.number_2 = int(input('Введите номер второй строчки: '))
-                print(self.csv_reader[self.number - 1:self.number_2])
+    def get_raws_by_index(self, *values, copy_table=False):
+        field_names = []
+        new_table = {}
+        for i in self._data:  # ПЕРЕВОДИМ ПЕРВУЮ СТРОКУ В ЛИСТ
+            field_names.append(i)
+            new_table[i] = []
+        for n in values:
+            new_table[field_names[0]].append(n)
+            v_index = self._data[field_names[0]].index(n)
+            for j in self._data:
+                if j == field_names[0]:
+                    continue
+                new_elem = self._data[j][v_index]
+                new_table[j].append(new_elem)
+
+        print(new_table)
+        if copy_table:
+            self._data = new_table
+
 
 
 # ФУНКЦИЯ ВЫГРУЗКИ ТАБЛИЦЫ ИЗ ФАЙЛА НАЧАЛО
@@ -303,5 +312,5 @@ table.set_value(vova)
 vova = table.get_value(column=0)
 print('get value = %s' % vova)
 table.print_table()
-table.get_raws_by_index()
+table.get_raws_by_index('1', '3', '4')
 table.save_table('NewTable1', file_type='txt')
