@@ -2,7 +2,7 @@ import csv
 import pickle
 import re
 import os.path
-
+import pandas as pd
 
 class Table:
     _data = {}
@@ -237,14 +237,10 @@ class Table:
         else:  # иначе по названию колонки
             return self._type_list
 
-    def get_rows_by_index(self):  # не могу записать в другой файл
-        self.index = str(input('Введите название столбца: '))
-        self.dict = str([])
-        with open("table.csv", mode='r', newline='') as csv_file:
-            self.reader = csv.DictReader(csv_file, delimiter=";")
-            for row in self.reader:
-                self.output_raw = row[self.index]
-                print(self.output_raw)
+    def get_raws_by_index(self):
+        self.keyword = str(input('Введите слово: '))
+        self.new_frame = pd.DataFrame(columns=self._data[self.keyword])
+        print(self.new_frame)
 
         def get_rows_by_number(self):  # ещё не сохраняет в другой файл и тд, нужно дополнить по условиям
             with open('table.csv') as csv_file:
@@ -307,4 +303,5 @@ table.set_value(vova)
 vova = table.get_value(column=0)
 print('get value = %s' % vova)
 table.print_table()
+table.get_raws_by_index()
 table.save_table('NewTable1', file_type='txt')
