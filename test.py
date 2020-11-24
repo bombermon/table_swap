@@ -131,8 +131,11 @@ class Table:
         print()
 
         num_str = 0
-        while True:
-            try:
+        try:
+            while True:
+                if not any(data):
+                    print('Данных нет!')
+                    return
                 for i in data:  # ДОБАВЛЕНИЕ ПРОБЕЛОВ ДЛЯ РОВНЫХ СТОЛБЦОВ
                     temp = data[i][num_str]
                     if len(temp) < len_of_col[i]:
@@ -142,8 +145,8 @@ class Table:
                     print(temp, end='')
                 print()
                 num_str += 1
-            except IndexError:
-                break
+        except IndexError:
+            return
 
     # ФУНКЦИЯ ВЫВОДА ТАБЛИЦЫ В КОНСОЛЬ НАЧАЛО
 
@@ -245,10 +248,7 @@ def load_table(file):
     state_file = os.path.isfile(file)
 
     if not state_file:
-        print('Вы ввели название таблицы (%s), которой не существует. Мы завели таблицу сами.' % file)
-        table._data = {'No': ['1999', '2', '3', '4'], 'Company': ['Ferrari', 'Lamborghini', 'porsche', 'BMW'],
-                       'Car Model': ['488 GTB', 'phantom', 'macan', 'X5']}
-        table._type_list = {'No': str, 'Company': str, 'Car Model': str}
+        raise Exception("Такого файла не существует, необходимо выбрать другой.")
     file_type = re.split('\.', file)
     file_type = file_type[-1]
 
@@ -286,11 +286,11 @@ def load_table(file):
             table._type_list = type_list
         return table
     except ValueError:
-        print('Fail')
+        print('Неверные значения в таблице!')
 
 
-vova = 'vova'
-table = load_table("NewFile.csv")
+vova = ['1','2','3']
+table = load_table("FileToTest.csv")
 table.set_value(vova)
 vova = table.get_value(column=0)
 print('get value = %s' % vova)
