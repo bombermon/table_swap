@@ -252,10 +252,7 @@ class Table:
                     continue
                 new_elem = self._data[j][v_index]
                 new_table[j].append(new_elem)
-
         print(new_table)
-        if copy_table:
-            self._data = new_table
 
 
 
