@@ -2,6 +2,7 @@ import csv
 import pickle
 import re
 import os.path
+import pandas as pd
 
 
 class Table:
@@ -254,6 +255,11 @@ class Table:
                 new_table[j].append(new_elem)
         print(new_table)
 
+    def get_rows_by_number(self, start, stop):
+        df = pd.DataFrame(self._data)
+        new_temp_data = df[start:stop]
+        print(new_temp_data)
+
 
 
 # ФУНКЦИЯ ВЫГРУЗКИ ТАБЛИЦЫ ИЗ ФАЙЛА НАЧАЛО
@@ -310,4 +316,5 @@ vova = table.get_value(column=0)
 print('get value = %s' % vova)
 table.print_table()
 table.get_raws_by_index('1', '3', '4')
+table.get_rows_by_number(1,3)
 table.save_table('NewTable1', file_type='txt')
