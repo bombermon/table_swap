@@ -192,7 +192,7 @@ class Table:
                     pickle.dump(data, f)  # ЗАПИСЫВАЕМ НАШ СЛОВАРЬ В ФАЙЛ .pickle
 
             elif file_type == 'txt':  # ЗАПИСЬ В ФАЙЛ .txt ТАКАЯ ЖЕ КАК ВЫВОД ТАБЛИЦЫ В КОНСОЛЬ
-                with open(name + '.txt', 'w') as f:
+                with open(name + '.txt', 'w', encoding='UTF-8') as f:
                     len_of_col = {}  # СЛОВАРЬ ДЛЯ ХРАНЕНИЯ ДЛИНЫ СТОЛБЦОВ
                     max_l = 0
                     full_len = 0
@@ -204,10 +204,10 @@ class Table:
                                 max_l = len(j)
                         len_of_col[i] = max_l  # ЗАПОЛНЕНИЯ СЛОВАРЯ МАКСИМАЛЬНЫМИ ДЛИНАМИ
                         full_len += max_l
-                    print('|', file=f, end='')
+                    print('┌', file=f, end='')
                     for j in range(full_len + 2):
                         print('-', file=f, end='')
-                    print('|', file=f)
+                    print('┐', file=f)
                     field_names_len = {}
                     print('|', file=f, end='')
                     for i in len_of_col:  # ФОРМИРОВАНИЕ РОВНЫХ СТОЛБЦОВ
@@ -222,21 +222,29 @@ class Table:
                     num_str = 0
                     while True:
                         try:
-                            print('|', file=f, end='')
-                            for i in data:  # ДОБАВЛЕНИЕ ПРОБЕЛОВ ДЛЯ РОВНЫХ СТОЛБЦОВ
-                                temp = data[i][num_str]
-                                if len(temp) < len_of_col[i]:
-                                    while len(temp) < len_of_col[i]:
-                                        temp += ' '
-                                temp += '|'
-                                print(temp, file=f, end='')
-                            print(file=f)
-                            num_str += 1
+                            while True:
+                                if not any(data):
+                                    print('Данных нет!')
+                                    return
+                                cheek_bool = True
+                                for i in data:  # ДОБАВЛЕНИЕ ПРОБЕЛОВ ДЛЯ РОВНЫХ СТОЛБЦОВ
+                                    temp = data[i][num_str]
+                                    if cheek_bool:
+                                        print('|', file=f, end='')
+                                        cheek_bool = False
+                                    if len(temp) < len_of_col[i]:
+                                        while len(temp) < len_of_col[i]:
+                                            temp += ' '
+                                    temp += '|'
+                                    print(temp, file=f, end='')
+                                print(file=f)
+                                num_str += 1
                         except IndexError:
+                            print('└', file=f, end='')
                             for j in range(full_len + 2):
-                                print('-', file=f, end='')
-                            print('|', file=f)
-                            break
+                                print('-', file=f,  end='')
+                            print('┘', file=f)
+                            return
             else:
                 raise Exception('Вы ввели неверный тип файла!')
         except FileNotFoundError:
@@ -395,6 +403,6 @@ table.print_table()
 new = table.get_raws_by_index('1', '3', '4')
 new.print_table()
 table.get_rows_by_number(1,3)
-table.save_table('NewTabl\e123.txt')
+table.save_table('NewTable123.txt')
 
 #  ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ
