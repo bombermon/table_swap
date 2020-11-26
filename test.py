@@ -176,7 +176,8 @@ class Table:
                 num_of_columns = 0
                 for i in field_names:
                     num_of_columns = max(num_of_columns, len(data[i]))
-                for i in range(0, num_of_columns):  # ПРЕОБРАЗУЕМ НАШЕ ПРЕДСТАВЛЕНИЕ В ПРЕДСТАВЛЕНИЕ УДОБНОЕ DictWriter CSV
+                for i in range(0,
+                               num_of_columns):  # ПРЕОБРАЗУЕМ НАШЕ ПРЕДСТАВЛЕНИЕ В ПРЕДСТАВЛЕНИЕ УДОБНОЕ DictWriter CSV
                     values = dict.fromkeys(field_names)
                     for j in field_names:
                         if i < len(data[j]):
@@ -242,7 +243,7 @@ class Table:
                         except IndexError:
                             print('└', file=f, end='')
                             for j in range(full_len + 2):
-                                print('-', file=f,  end='')
+                                print('-', file=f, end='')
                             print('┘', file=f)
                             return
             else:
@@ -264,43 +265,43 @@ class Table:
             return self._type_list
 
     def set_column_types(self, type_dict, by_number=True):  # Считываем словарь с типами столбцов
-        if type(type_dict) != dict: # Проверка на соответствующий тип дл type_dict
+        if type(type_dict) != dict:  # Проверка на соответствующий тип дл type_dict
             raise BaseException("type_dict не является словарем")
-        if len(self._type_list) != len(type_dict): # Проверка на размер таблицы
+        if len(self._type_list) != len(type_dict):  # Проверка на размер таблицы
             raise BaseException("Несоответствующее количество колонок таблицы и слов в type_dict словаре")
         if by_number:
             temp = {}
             for i in range(1, len(type_dict) + 1):
-                if type_dict.get(i) == None: # Проверка на нурмерацию таблицы при by_number = True
+                if type_dict.get(i) == None:  # Проверка на нурмерацию таблицы при by_number = True
                     raise BaseException("Неправильно пронумерован type_dict словарь")
             counter = 1
-            for i in self._type_list.keys(): # Переводим type_dict как при by_number = False
+            for i in self._type_list.keys():  # Переводим type_dict как при by_number = False
                 temp.update({i: type_dict[counter]})
                 counter += 1
         else:
             for i in type_dict.keys():
-                if self._type_list.get(i) == None: # Проверка на нурмерацию таблицы при by_number = False
+                if self._type_list.get(i) == None:  # Проверка на нурмерацию таблицы при by_number = False
                     raise BaseException("В таблице нет названия колонки которая есть в type_dict словаре")
         for i in type_dict.keys():
-            if not(type_dict[i] == str or type_dict[i] == int or type_dict[i] == float or type_dict[i] == bool):
-                raise BaseException("Неверный тип объекта") # Проверка на разрешенные типы обЪектов
+            if not (type_dict[i] == str or type_dict[i] == int or type_dict[i] == float or type_dict[i] == bool):
+                raise BaseException("Неверный тип объекта")  # Проверка на разрешенные типы обЪектов
             if self._type_list[i] != type_dict[i]:
-                if type_dict[i] == str: # Переводим в str
+                if type_dict[i] == str:  # Переводим в str
                     for j in range(0, len(self._data[i])):
-                        if  self._data[i][j] != None:
+                        if self._data[i][j] != None:
                             self._data[i][j] = str(self._data[i][j])
-                elif type_dict[i] == bool: # Переводим в bool
+                elif type_dict[i] == bool:  # Переводим в bool
                     for j in range(0, len(self._data[i])):
                         if self._data[i][j] != None:
                             self._data[i][j] = bool(self._data[i][j])
-                elif type_dict[i] == int: # Переводим в int, если можно
+                elif type_dict[i] == int:  # Переводим в int, если можно
                     for j in range(0, len(self._data[i])):
                         if self._data[i][j] != None and self._type_list[i] != str:
                             self._data[i][j] = int(self._data[i][j])
                         else:
                             self._data[i][j] = None
                 else:
-                    for j in range(0, len(self._data[i])): # Переводим в float, если можно
+                    for j in range(0, len(self._data[i])):  # Переводим в float, если можно
                         if self._data[i][j] != None and self._type_list[i] != str:
                             self._data[i][j] = float(self._data[i][j])
                         else:
@@ -312,20 +313,20 @@ class Table:
         for i in self._data:  # ПЕРЕВОДИМ ПЕРВУЮ СТРОКУ В ЛИСТ
             field_names.append(i)
             new_table._data[i] = []
-        for n in values:      # ИЩЕМ ЗНАЧЕНИЯ В ТАБЛИЦЕ
+        for n in values:  # ИЩЕМ ЗНАЧЕНИЯ В ТАБЛИЦЕ
             new_table._data[field_names[0]].append(n)
             v_index = self._data[field_names[0]].index(n)
-            for j in self._data:        # ПРОВЕРКА НА СОВПАДЕНИЕ ТАБЛИЦЫ
+            for j in self._data:  # ПРОВЕРКА НА СОВПАДЕНИЕ ТАБЛИЦЫ
                 if j == field_names[0]:
                     continue
                 new_elem = self._data[j][v_index]
-                new_table._data[j].append(new_elem) # ЗАПОЛНЕНИЕ ТАБЛИЦЫ НОВЫМИ ЭЛЕМЕНТАМИ
+                new_table._data[j].append(new_elem)  # ЗАПОЛНЕНИЕ ТАБЛИЦЫ НОВЫМИ ЭЛЕМЕНТАМИ
         return new_table
 
     def get_rows_by_number(self, start, stop, copy_table=False):
         try:
             field_names = []
-            if start <= stop:   # ДЕЛАЕМ ПРЕОБРАЗОВАНИЯ
+            if start <= stop:  # ДЕЛАЕМ ПРЕОБРАЗОВАНИЯ
                 if start <= 0:
                     start = 1
             else:
@@ -393,6 +394,7 @@ def load_table(file):
     except ValueError:
         print('Неверные значения в таблице!')
 
+
 # ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ
 vova = '1'
 table = load_table("NewFile.csv")
@@ -402,7 +404,7 @@ print('get value = %s' % vova)
 table.print_table()
 new = table.get_raws_by_index('1', '3', '4')
 new.print_table()
-table.get_rows_by_number(1,3)
+table.get_rows_by_number(1, 3)
 table.save_table('NewTable123.txt')
 
 #  ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ
