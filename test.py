@@ -238,7 +238,6 @@ class Table:
         else:  # иначе по названию колонки
             return self._type_list
 
-
     def get_raws_by_index(self, *values, copy_table=False):
         field_names = []
         new_table = {}
@@ -256,10 +255,10 @@ class Table:
         print(new_table)
 
     def get_rows_by_number(self, start, stop):
+        new_table = {}
         df = pd.DataFrame(self._data)
-        new_temp_data = df[start:stop]
+        new_temp_data = df[start:stop].to_dict()
         print(new_temp_data)
-
 
 
 # ФУНКЦИЯ ВЫГРУЗКИ ТАБЛИЦЫ ИЗ ФАЙЛА НАЧАЛО
@@ -316,5 +315,5 @@ vova = table.get_value(column=0)
 print('get value = %s' % vova)
 table.print_table()
 table.get_raws_by_index('1', '3', '4')
-table.get_rows_by_number(1,3)
+table.get_rows_by_number(1, 3)
 table.save_table('NewTable1', file_type='txt')
