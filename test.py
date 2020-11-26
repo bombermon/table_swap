@@ -2,7 +2,6 @@ import csv
 import pickle
 import re
 import os.path
-import pandas as pd
 
 
 class Table:
@@ -114,10 +113,10 @@ class Table:
                     max_l = len(j)
             len_of_col[i] = max_l
             full_len += max_l
-        print('|', end='')
+        print('┌', end='')
         for j in range(full_len + 2):
             print('-', end='')
-        print('|')
+        print('┐')
         field_names_len = {}
         print('|', end='')
         for i in len_of_col:  # ФОРМИРОВАНИЕ РОВНЫХ СТОЛБЦОВ
@@ -135,9 +134,12 @@ class Table:
                 if not any(data):
                     print('Данных нет!')
                     return
-                print('|', end='')
+                cheek_bool = True
                 for i in data:  # ДОБАВЛЕНИЕ ПРОБЕЛОВ ДЛЯ РОВНЫХ СТОЛБЦОВ
                     temp = data[i][num_str]
+                    if cheek_bool:
+                        print('|', end='')
+                        cheek_bool = False
                     if len(temp) < len_of_col[i]:
                         while len(temp) < len_of_col[i]:
                             temp += ' '
@@ -146,9 +148,10 @@ class Table:
                 print()
                 num_str += 1
         except IndexError:
+            print('└', end='')
             for j in range(full_len + 2):
                 print('-', end='')
-            print('|')
+            print('┘')
             return
 
     # ФУНКЦИЯ ВЫВОДА ТАБЛИЦЫ В КОНСОЛЬ НАЧАЛО
@@ -251,6 +254,49 @@ class Table:
             return type_list
         else:  # иначе по названию колонки
             return self._type_list
+
+    def set_column_types(self, type_dict, by_number=True):  # Считываем словарь с типами столбцов
+        if type(type_dict) != dict: # Проверка на соответствующий тип дл type_dict
+            raise BaseException("type_dict не является словарем")
+        if len(self._type_list) != len(type_dict): # Проверка на размер таблицы
+            raise BaseException("Несоответствующее количество колонок таблицы и слов в type_dict словаре")
+        if by_number:
+            temp = {}
+            for i in range(1, len(type_dict) + 1):
+                if type_dict.get(i) == None: # Проверка на нурмерацию таблицы при by_number = True
+                    raise BaseException("Неправильно пронумерован type_dict словарь")
+            counter = 1
+            for i in self._type_list.keys(): # Переводим type_dict как при by_number = False
+                temp.update({i: type_dict[counter]})
+                counter += 1
+        else:
+            for i in type_dict.keys():
+                if self._type_list.get(i) == None: # Проверка на нурмерацию таблицы при by_number = False
+                    raise BaseException("В таблице нет названия колонки которая есть в type_dict словаре")
+        for i in type_dict.keys():
+            if not(type_dict[i] == str or type_dict[i] == int or type_dict[i] == float or type_dict[i] == bool):
+                raise BaseException("Неверный тип объекта") # Проверка на разрешенные типы обЪектов
+            if self._type_list[i] != type_dict[i]:
+                if type_dict[i] == str: # Переводим в str
+                    for j in range(0, len(self._data[i])):
+                        if  self._data[i][j] != None:
+                            self._data[i][j] = str(self._data[i][j])
+                elif type_dict[i] == bool: # Переводим в bool
+                    for j in range(0, len(self._data[i])):
+                        if self._data[i][j] != None:
+                            self._data[i][j] = bool(self._data[i][j])
+                elif type_dict[i] == int: # Переводим в int, если можно
+                    for j in range(0, len(self._data[i])):
+                        if self._data[i][j] != None and self._type_list[i] != str:
+                            self._data[i][j] = int(self._data[i][j])
+                        else:
+                            self._data[i][j] = None
+                else:
+                    for j in range(0, len(self._data[i])): # Переводим в float, если можно
+                        if self._data[i][j] != None and self._type_list[i] != str:
+                            self._data[i][j] = float(self._data[i][j])
+                        else:
+                            self._data[i][j] = None
 
     def get_raws_by_index(self, *values, copy_table=False):
         field_names = []
