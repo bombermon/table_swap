@@ -240,25 +240,44 @@ class Table:
 
     def get_raws_by_index(self, *values, copy_table=False):
         field_names = []
-        new_table = {}
+        new_table = Table()
         for i in self._data:  # ПЕРЕВОДИМ ПЕРВУЮ СТРОКУ В ЛИСТ
             field_names.append(i)
-            new_table[i] = []
-        for n in values:
-            new_table[field_names[0]].append(n)
+            new_table._data[i] = []
+        for n in values:      # ИЩЕМ ЗНАЧЕНИЯ В ТАБЛИЦЕ
+            new_table._data[field_names[0]].append(n)
             v_index = self._data[field_names[0]].index(n)
-            for j in self._data:
+            for j in self._data:        # ПРОВЕРКА НА СОВПАДЕНИЕ ТАБЛИЦЫ
                 if j == field_names[0]:
                     continue
                 new_elem = self._data[j][v_index]
-                new_table[j].append(new_elem)
-        print(new_table)
+                new_table._data[j].append(new_elem) # ЗАПОЛНЕНИЕ ТАБЛИЦЫ НОВЫМИ ЭЛЕМЕНТАМИ
+        return new_table
 
-    def get_rows_by_number(self, start, stop):
-        new_table = {}
-        df = pd.DataFrame(self._data)
-        new_temp_data = df[start:stop].to_dict()
-        print(new_temp_data)
+    def get_rows_by_number(self, start, stop, copy_table=False):
+        try:
+            field_names = []
+            if start <= stop:   # ДЕЛАЕМ ПРЕОБРАЗОВАНИЯ
+                if start <= 0:
+                    start = 1
+            else:
+                print('Интвервал должен идти по возрастанию!')
+                return
+            start -= 1
+            new_table = Table()
+            for i in self._data:  # ПЕРЕВОДИМ ПЕРВУЮ СТРОКУ В ЛИСТ
+                field_names.append(i)
+                new_table._data[i] = []
+            for j in range(start, stop):  # ПРОХОДИМСЯ ПО ВСЕМУ ИНТЕРВАЛУ
+                for k in field_names:
+                    temp = self._data[k][j]  # ВЫТАСКИВАЕМ ПО НОМЕРУ СТРОКИ ЭЛЕМЕНТ
+                    new_table._data[k].append(temp)
+            new_table.print_table()
+            print(new_table)
+        except IndexError:
+            print('Введены неверные значения!')
+        except ValueError:
+            print('Введены неверные значения!')
 
 
 # ФУНКЦИЯ ВЫГРУЗКИ ТАБЛИЦЫ ИЗ ФАЙЛА НАЧАЛО
@@ -307,13 +326,16 @@ def load_table(file):
     except ValueError:
         print('Неверные значения в таблице!')
 
-
+# ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ
 vova = '1'
 table = load_table("NewFile.csv")
 table.set_value(vova)
 vova = table.get_value(column=0)
 print('get value = %s' % vova)
 table.print_table()
-table.get_raws_by_index('1', '3', '4')
-table.get_rows_by_number(1, 3)
+new = table.get_raws_by_index('1', '3', '4')
+new.print_table()
+table.get_rows_by_number(1,3)
 table.save_table('NewTable1', file_type='txt')
+
+#  ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ
