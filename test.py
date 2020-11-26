@@ -157,76 +157,90 @@ class Table:
     # ФУНКЦИЯ ВЫВОДА ТАБЛИЦЫ В КОНСОЛЬ НАЧАЛО
 
     # ФУНКЦИЯ СОХРАНЕНИЯ ТАБЛИЦЫ В НОВЫЙ ФАЙЛ НАЧАЛО
-    def save_table(self, name, file_type='csv'):
-        data = self._data
+    def save_table(self, name):
+        try:
+            data = self._data
 
-        if file_type == 'csv':  # ПРОВЕРЯЕМ ТИП ФАЙЛА
-            temp_table = []
-            field_names = data.keys()
-            num_of_columns = 0
-            for i in field_names:
-                num_of_columns = max(num_of_columns, len(data[i]))
-            for i in range(0, num_of_columns):  # ПРЕОБРАЗУЕМ НАШЕ ПРЕДСТАВЛЕНИЕ В ПРЕДСТАВЛЕНИЕ УДОБНОЕ DictWriter CSV
-                values = dict.fromkeys(field_names)
-                for j in field_names:
-                    if i < len(data[j]):
-                        values[j] = data[j][i]
-                temp_table.append(values)
-            with open(name + '.csv', 'w') as csv_file:  # ОТКРЫВАЕМ (ИЛИ СОЗДАЕМ ФАЙЛ CSV НА ЗАПИСЬ СЛОВАРЯ)
-                writer = csv.DictWriter(csv_file, fieldnames=field_names)
-                writer.writeheader()
-                writer.writerows(temp_table)
+            namelist = re.split('\.', name)  # ОТДЕЛЯЕМ ИМЯ И ТИП ФАЙЛА
+            file_type = namelist[-1]
+            namelist.pop(-1)
+            name = ''
+            for z in namelist:
+                name += z
+                name += '.'
+            name = name[:-1]
 
-        elif file_type == 'pickle':
-            with open(name + '.pickle', 'wb') as f:  # ОТКРЫВАЕМ ФАЙЛ В ФОРМАТЕ .pickle на чтение в битах
-                pickle.dump(data, f)  # ЗАПИСЫВАЕМ НАШ СЛОВАРЬ В ФАЙЛ .pickle
+            if file_type == 'csv':  # ПРОВЕРЯЕМ ТИП ФАЙЛА
+                temp_table = []
+                field_names = data.keys()
+                num_of_columns = 0
+                for i in field_names:
+                    num_of_columns = max(num_of_columns, len(data[i]))
+                for i in range(0, num_of_columns):  # ПРЕОБРАЗУЕМ НАШЕ ПРЕДСТАВЛЕНИЕ В ПРЕДСТАВЛЕНИЕ УДОБНОЕ DictWriter CSV
+                    values = dict.fromkeys(field_names)
+                    for j in field_names:
+                        if i < len(data[j]):
+                            values[j] = data[j][i]
+                    temp_table.append(values)
+                with open(name + '.csv', 'w') as csv_file:  # ОТКРЫВАЕМ (ИЛИ СОЗДАЕМ ФАЙЛ CSV НА ЗАПИСЬ СЛОВАРЯ)
+                    writer = csv.DictWriter(csv_file, fieldnames=field_names)
+                    writer.writeheader()
+                    writer.writerows(temp_table)
 
-        elif file_type == 'txt':  # ЗАПИСЬ В ФАЙЛ .txt ТАКАЯ ЖЕ КАК ВЫВОД ТАБЛИЦЫ В КОНСОЛЬ
-            with open(name + '.txt', 'w') as f:
-                len_of_col = {}  # СЛОВАРЬ ДЛЯ ХРАНЕНИЯ ДЛИНЫ СТОЛБЦОВ
-                max_l = 0
-                full_len = 0
-                for i in data:  # ПЕРЕБОР СЛОВАРЯ ПО ВСЕМ СЛОВАМ И ЗНАЧЕНИЯМ
-                    if len(i) > max_l:  # НАХОЖДЕНИЕ САМОГО ДЛИННОГО СЛОВА
-                        max_l = len(i)
-                    for j in data[i]:
-                        if len(j) > max_l:
-                            max_l = len(j)
-                    len_of_col[i] = max_l  # ЗАПОЛНЕНИЯ СЛОВАРЯ МАКСИМАЛЬНЫМИ ДЛИНАМИ
-                    full_len += max_l
-                print('|', file=f, end='')
-                for j in range(full_len + 2):
-                    print('-', file=f, end='')
-                print('|', file=f)
-                field_names_len = {}
-                print('|', file=f, end='')
-                for i in len_of_col:  # ФОРМИРОВАНИЕ РОВНЫХ СТОЛБЦОВ
-                    temp_key = i
-                    if len(i) < len_of_col[i]:
-                        while len(i) < len_of_col[temp_key]:
-                            i = i + ' '
-                    print(i + '|', file=f, end="")
-                    field_names_len[i] = len_of_col[temp_key]
-                print(file=f)
+            elif file_type == 'pickle':
+                with open(name + '.pickle', 'wb') as f:  # ОТКРЫВАЕМ ФАЙЛ В ФОРМАТЕ .pickle на чтение в битах
+                    pickle.dump(data, f)  # ЗАПИСЫВАЕМ НАШ СЛОВАРЬ В ФАЙЛ .pickle
 
-                num_str = 0
-                while True:
-                    try:
-                        print('|', file=f, end='')
-                        for i in data:  # ДОБАВЛЕНИЕ ПРОБЕЛОВ ДЛЯ РОВНЫХ СТОЛБЦОВ
-                            temp = data[i][num_str]
-                            if len(temp) < len_of_col[i]:
-                                while len(temp) < len_of_col[i]:
-                                    temp += ' '
-                            temp += '|'
-                            print(temp, file=f, end='')
-                        print(file=f)
-                        num_str += 1
-                    except IndexError:
-                        for j in range(full_len + 2):
-                            print('-', file=f, end='')
-                        print('|', file=f)
-                        break
+            elif file_type == 'txt':  # ЗАПИСЬ В ФАЙЛ .txt ТАКАЯ ЖЕ КАК ВЫВОД ТАБЛИЦЫ В КОНСОЛЬ
+                with open(name + '.txt', 'w') as f:
+                    len_of_col = {}  # СЛОВАРЬ ДЛЯ ХРАНЕНИЯ ДЛИНЫ СТОЛБЦОВ
+                    max_l = 0
+                    full_len = 0
+                    for i in data:  # ПЕРЕБОР СЛОВАРЯ ПО ВСЕМ СЛОВАМ И ЗНАЧЕНИЯМ
+                        if len(i) > max_l:  # НАХОЖДЕНИЕ САМОГО ДЛИННОГО СЛОВА
+                            max_l = len(i)
+                        for j in data[i]:
+                            if len(j) > max_l:
+                                max_l = len(j)
+                        len_of_col[i] = max_l  # ЗАПОЛНЕНИЯ СЛОВАРЯ МАКСИМАЛЬНЫМИ ДЛИНАМИ
+                        full_len += max_l
+                    print('|', file=f, end='')
+                    for j in range(full_len + 2):
+                        print('-', file=f, end='')
+                    print('|', file=f)
+                    field_names_len = {}
+                    print('|', file=f, end='')
+                    for i in len_of_col:  # ФОРМИРОВАНИЕ РОВНЫХ СТОЛБЦОВ
+                        temp_key = i
+                        if len(i) < len_of_col[i]:
+                            while len(i) < len_of_col[temp_key]:
+                                i = i + ' '
+                        print(i + '|', file=f, end="")
+                        field_names_len[i] = len_of_col[temp_key]
+                    print(file=f)
+
+                    num_str = 0
+                    while True:
+                        try:
+                            print('|', file=f, end='')
+                            for i in data:  # ДОБАВЛЕНИЕ ПРОБЕЛОВ ДЛЯ РОВНЫХ СТОЛБЦОВ
+                                temp = data[i][num_str]
+                                if len(temp) < len_of_col[i]:
+                                    while len(temp) < len_of_col[i]:
+                                        temp += ' '
+                                temp += '|'
+                                print(temp, file=f, end='')
+                            print(file=f)
+                            num_str += 1
+                        except IndexError:
+                            for j in range(full_len + 2):
+                                print('-', file=f, end='')
+                            print('|', file=f)
+                            break
+            else:
+                raise Exception('Вы ввели неверный тип файла!')
+        except FileNotFoundError:
+            print('Вы ввели неподдерживаемое имя файла!')
 
     # ФУНКЦИЯ СОХРАНЕНИЯ ТАБЛИЦЫ В НОВЫЙ ФАЙЛ КОНЕЦ
 
@@ -319,7 +333,6 @@ class Table:
                     temp = self._data[k][j]  # ВЫТАСКИВАЕМ ПО НОМЕРУ СТРОКИ ЭЛЕМЕНТ
                     new_table._data[k].append(temp)
             new_table.print_table()
-            print(new_table)
         except IndexError:
             print('Введены неверные значения!')
         except ValueError:
@@ -382,6 +395,6 @@ table.print_table()
 new = table.get_raws_by_index('1', '3', '4')
 new.print_table()
 table.get_rows_by_number(1,3)
-table.save_table('NewTable1', file_type='txt')
+table.save_table('NewTabl\e123.txt')
 
 #  ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ
