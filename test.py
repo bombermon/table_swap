@@ -392,9 +392,9 @@ def load_table(*files):
                     temp = dictionary[i][0]
                     type_list[i] = type(temp)
                 table._type_list = type_list
-            return table
         except ValueError:
             print('Неверные значения в таблице!')
+    return table
 
 
 # ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ
