@@ -159,6 +159,7 @@ class Table:
     # ФУНКЦИЯ СОХРАНЕНИЯ ТАБЛИЦЫ В НОВЫЙ ФАЙЛ НАЧАЛО
     def save_table(self, name):
         try:
+
             data = self._data
 
             namelist = re.split('\.', name)  # ОТДЕЛЯЕМ ИМЯ И ТИП ФАЙЛА
@@ -349,55 +350,58 @@ class Table:
 
 
 # ФУНКЦИЯ ВЫГРУЗКИ ТАБЛИЦЫ ИЗ ФАЙЛА НАЧАЛО
-def load_table(file):
-    table = Table()  # Храним таблицу
-    state_file = os.path.isfile(file)
+def load_table(*files):
+    for file in files:
+        table = Table()  # Храним таблицу
+        state_file = os.path.isfile(file)
 
-    if not state_file:
-        raise Exception("Такого файла не существует, необходимо выбрать другой.")
-    file_type = re.split('\.', file)
-    file_type = file_type[-1]
+        if not state_file:
+            raise Exception("Такого файла не существует, необходимо выбрать другой.")
+        file_type = re.split('\.', file)
+        file_type = file_type[-1]
 
-    try:
-        if file_type == "pickle":  # Считываем таблицу используя pickle
-            with open(file, "rb") as f:
-                table = pickle.load(f)
-        elif file_type == "csv":  # Считываем таблицу используя csv
-            dictionary = {}
-            with open(file, "r") as f:
-                file_reader = csv.reader(f, delimiter=",")  # преобразуем файл в лист листов
-                table_key_dictionary = {}  # Создаем словарь атрибутов таблицы и записываем их номер
-                # Счетчик для подсчета количества строк
-                lines_count = 0  # Считаем номер строки
-                # Считывание данных из CSV файла
-                for row in file_reader:  # Проходимся по строкам таблицы
-                    if lines_count == 0:  # В первой строк находяться атрибуты, создаем ключи в словаре
-                        key_count = 0
-                        for i in row:
-                            dictionary[i] = []
-                            table_key_dictionary[key_count] = i
-                            key_count += 1
-                    else:
-                        key_count = 0
-                        for i in row:
-                            dictionary.get(table_key_dictionary.get(key_count)).append(
-                                i)  # Записываем нужный столбик нужный элемент
-                            key_count += 1
-                    lines_count += 1
-            table._data = dictionary
-            type_list = {}
-            for i in dictionary:
-                temp = dictionary[i][0]
-                type_list[i] = type(temp)
-            table._type_list = type_list
-        return table
-    except ValueError:
-        print('Неверные значения в таблице!')
+        try:
+            if file_type == "pickle":  # Считываем таблицу используя pickle
+                with open(file, "rb") as f:
+                    table = pickle.load(f)
+            elif file_type == "csv":  # Считываем таблицу используя csv
+                dictionary = {}
+                with open(file, "r") as f:
+                    file_reader = csv.reader(f, delimiter=",")  # преобразуем файл в лист листов
+                    table_key_dictionary = {}  # Создаем словарь атрибутов таблицы и записываем их номер
+                    # Счетчик для подсчета количества строк
+                    lines_count = 0  # Считаем номер строки
+                    # Считывание данных из CSV файла
+                    for row in file_reader:  # Проходимся по строкам таблицы
+                        if lines_count == 0:  # В первой строк находяться атрибуты, создаем ключи в словаре
+                            key_count = 0
+                            for i in row:
+                                dictionary[i] = []
+                                table_key_dictionary[key_count] = i
+                                key_count += 1
+                        else:
+                            key_count = 0
+                            for i in row:
+                                dictionary.get(table_key_dictionary.get(key_count)).append(
+                                    i)  # Записываем нужный столбик нужный элемент
+                                key_count += 1
+                        lines_count += 1
+                table._data = dictionary
+                type_list = {}
+                for i in dictionary:
+                    temp = dictionary[i][0]
+                    type_list[i] = type(temp)
+                table._type_list = type_list
+            return table
+        except ValueError:
+            print('Неверные значения в таблице!')
 
 
 # ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ
 vova = '1'
-table = load_table("NewFile.csv")
+table = load_table("NewFile.csv", 'FileToTest.csv')
+table.print_table()
+'''
 table.set_value(vova)
 vova = table.get_value(column=0)
 print('get value = %s' % vova)
@@ -406,5 +410,5 @@ new = table.get_raws_by_index('1', '3', '4')
 new.print_table()
 table.get_rows_by_number(1, 3)
 table.save_table('NewTable123.txt')
-
+'''
 #  ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ
