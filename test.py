@@ -326,7 +326,7 @@ class Table:
         except AttributeError:
             print('Таблица неверно записана!')
 
-    def get_raws_by_index(self, *values, copy_table=False):
+    def get_rows_by_index(self, *values, copy_table=False):
         try:
             field_names = []
             new_table = Table()
@@ -341,6 +341,7 @@ class Table:
                         continue
                     new_elem = self._data[j][v_index]
                     new_table._data[j].append(new_elem)  # ЗАПОЛНЕНИЕ ТАБЛИЦЫ НОВЫМИ ЭЛЕМЕНТАМИ
+            new_table._type_list = self._type_list
             return new_table
         except ValueError:
             print('Такого значения не существует')
@@ -364,7 +365,8 @@ class Table:
                 for k in field_names:
                     temp = self._data[k][j]  # ВЫТАСКИВАЕМ ПО НОМЕРУ СТРОКИ ЭЛЕМЕНТ
                     new_table._data[k].append(temp)
-            new_table.print_table()
+            new_table._type_list = self._type_list
+            return new_table
         except IndexError:
             print('Введены неверные значения!')
         except ValueError:
@@ -430,19 +432,3 @@ def load_table(*files):
         except ValueError:
             print('Неверные значения в таблице!')
     return table
-
-# ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ
-vova = '1'
-table = load_table("NewFile.pickle", "FileToTest.csv")
-table.print_table()
-'''
-table.set_value(vova)
-vova = table.get_value(column=0)
-print('get value = %s' % vova)
-table.print_table()
-new = table.get_raws_by_index('1', '3', '4')
-new.print_table()
-table.get_rows_by_number(1, 3)
-table.save_table('NewTable123.txt')
-'''
-#  ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ
