@@ -191,7 +191,7 @@ class Table:
 
             elif file_type == 'pickle':
                 with open(name + '.pickle', 'wb') as f:  # ОТКРЫВАЕМ ФАЙЛ В ФОРМАТЕ .pickle на чтение в битах
-                    pickle.dump(data, f)  # ЗАПИСЫВАЕМ НАШ СЛОВАРЬ В ФАЙЛ .pickle
+                    pickle.dump(self, f)  # ЗАПИСЫВАЕМ НАШ СЛОВАРЬ В ФАЙЛ .pickle
 
             elif file_type == 'txt':  # ЗАПИСЬ В ФАЙЛ .txt ТАКАЯ ЖЕ КАК ВЫВОД ТАБЛИЦЫ В КОНСОЛЬ
                 with open(name + '.txt', 'w', encoding='UTF-8') as f:
@@ -351,21 +351,24 @@ class Table:
 
 # ФУНКЦИЯ ВЫГРУЗКИ ТАБЛИЦЫ ИЗ ФАЙЛА НАЧАЛО
 def load_table(*files):
+    counter = 0
+    table = Table()  # Храним таблицу
     for file in files:
-        table = Table()  # Храним таблицу
         state_file = os.path.isfile(file)
-
         if not state_file:
             raise Exception("Такого файла не существует, необходимо выбрать другой.")
         file_type = re.split('\.', file)
         file_type = file_type[-1]
 
         try:
+            dictionary = {}
+            type_list = {}
             if file_type == "pickle":  # Считываем таблицу используя pickle
                 with open(file, "rb") as f:
-                    table = pickle.load(f)
+                    temp = pickle.load(f)
+                    dictionary = temp._data
+                    type_list = temp._type_list
             elif file_type == "csv":  # Считываем таблицу используя csv
-                dictionary = {}
                 with open(file, "r") as f:
                     file_reader = csv.reader(f, delimiter=",")  # преобразуем файл в лист листов
                     table_key_dictionary = {}  # Создаем словарь атрибутов таблицы и записываем их номер
@@ -386,12 +389,20 @@ def load_table(*files):
                                     i)  # Записываем нужный столбик нужный элемент
                                 key_count += 1
                         lines_count += 1
-                table._data = dictionary
-                type_list = {}
-                for i in dictionary:
-                    temp = dictionary[i][0]
-                    type_list[i] = type(temp)
+            for i in dictionary:
+                temp = dictionary[i][0]
+                type_list[i] = type(temp)
+            if counter == 0:
                 table._type_list = type_list
+                table._data = dictionary
+            else:
+                if table._type_list == type_list:
+                    for i in type_list.keys():
+                        table._data[i] += dictionary[i]
+                else:
+                    raise Exception("В файлах разные таблицы")
+
+            counter += 1
         except ValueError:
             print('Неверные значения в таблице!')
     return table
@@ -399,7 +410,7 @@ def load_table(*files):
 
 # ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ
 vova = '1'
-table = load_table("NewFile.csv", 'FileToTest.csv')
+table = load_table("NewFile.pickle", "FileToTest.csv")
 table.print_table()
 '''
 table.set_value(vova)
