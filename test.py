@@ -101,58 +101,62 @@ class Table:
 
     # ФУНКЦИЯ ВЫВОДА ТАБЛИЦЫ В КОНСОЛЬ НАЧАЛО
     def print_table(self):
-        data = self._data
-        len_of_col = {}
-        full_len = 0
-        max_l = 0
-        for i in data:  # ПЕРЕБОР СЛОВАРЯ ПО ВСЕМ СЛОВАМ И ЗНАЧЕНИЯМ
-            if len(i) > max_l:  # НАХОЖДЕНИЕ САМОГО ДЛИННОГО СЛОВА
-                max_l = len(i)
-            for j in data[i]:
-                if len(j) > max_l:
-                    max_l = len(j)
-            len_of_col[i] = max_l
-            full_len += max_l
-        print('┌', end='')
-        for j in range(full_len + 2):
-            print('-', end='')
-        print('┐')
-        field_names_len = {}
-        print('|', end='')
-        for i in len_of_col:  # ФОРМИРОВАНИЕ РОВНЫХ СТОЛБЦОВ
-            temp_key = i
-            if len(i) < len_of_col[i]:
-                while len(i) < len_of_col[temp_key]:
-                    i = i + ' '
-            print(i + '|', end="")
-            field_names_len[i] = len_of_col[temp_key]
-        print()
-
-        num_str = 0
         try:
-            while True:
-                if not any(data):
-                    print('Данных нет!')
-                    return
-                cheek_bool = True
-                for i in data:  # ДОБАВЛЕНИЕ ПРОБЕЛОВ ДЛЯ РОВНЫХ СТОЛБЦОВ
-                    temp = data[i][num_str]
-                    if cheek_bool:
-                        print('|', end='')
-                        cheek_bool = False
-                    if len(temp) < len_of_col[i]:
-                        while len(temp) < len_of_col[i]:
-                            temp += ' '
-                    temp += '|'
-                    print(temp, end='')
-                print()
-                num_str += 1
-        except IndexError:
-            print('└', end='')
+            data = self._data
+            len_of_col = {}
+            full_len = 0
+            max_l = 0
+            for i in data:  # ПЕРЕБОР СЛОВАРЯ ПО ВСЕМ СЛОВАМ И ЗНАЧЕНИЯМ
+                if len(i) > max_l:  # НАХОЖДЕНИЕ САМОГО ДЛИННОГО СЛОВА
+                    max_l = len(i)
+                for j in data[i]:
+                    if len(j) > max_l:
+                        max_l = len(j)
+                len_of_col[i] = max_l
+                full_len += max_l
+            print('┌', end='')
             for j in range(full_len + 2):
                 print('-', end='')
-            print('┘')
-            return
+            print('┐')
+            field_names_len = {}
+            print('|', end='')
+            for i in len_of_col:  # ФОРМИРОВАНИЕ РОВНЫХ СТОЛБЦОВ
+                temp_key = i
+                if len(i) < len_of_col[i]:
+                    while len(i) < len_of_col[temp_key]:
+                        i = i + ' '
+                print(i + '|', end="")
+                field_names_len[i] = len_of_col[temp_key]
+            print()
+
+            num_str = 0
+            try:
+                while True:
+                    if not any(data):
+                        print('Данных нет!')
+                        return
+                    cheek_bool = True
+                    for i in data:  # ДОБАВЛЕНИЕ ПРОБЕЛОВ ДЛЯ РОВНЫХ СТОЛБЦОВ
+                        temp = data[i][num_str]
+                        if cheek_bool:
+                            print('|', end='')
+                            cheek_bool = False
+                        if len(temp) < len_of_col[i]:
+                            while len(temp) < len_of_col[i]:
+                                temp += ' '
+                        temp += '|'
+                        print(temp, end='')
+                    print()
+                    num_str += 1
+            except IndexError:
+                print('└', end='')
+                for j in range(full_len + 2):
+                    print('-', end='')
+                print('┘')
+                return
+        except AttributeError:
+            print('Таблица неверно записана!')
+
 
     # ФУНКЦИЯ ВЫВОДА ТАБЛИЦЫ В КОНСОЛЬ НАЧАЛО
 
@@ -255,74 +259,92 @@ class Table:
     # ФУНКЦИЯ СОХРАНЕНИЯ ТАБЛИЦЫ В НОВЫЙ ФАЙЛ КОНЕЦ
 
     def get_column_types(self, by_number=True):  # Получаем словарь с типами столбцов
-        if by_number:  # если надо нумеруем от одного
-            type_list = {}
-            counter = 1
-            for i in self._type_list:
-                type_list.update({counter: self._type_list[i]})
-                counter += 1
-            return type_list
-        else:  # иначе по названию колонки
-            return self._type_list
+        try:
+            if by_number:  # если надо нумеруем от одного
+                type_list = {}
+                counter = 1
+                for i in self._type_list:
+                    type_list.update({counter: self._type_list[i]})
+                    counter += 1
+                return type_list
+            else:  # иначе по названию колонки
+                return self._type_list
+        except IndexError:
+            print('Введены неверные значения!')
+        except ValueError:
+            print('Введены неверные значения!')
+        except AttributeError:
+            print('Таблица неверно записана!')
 
     def set_column_types(self, type_dict, by_number=True):  # Считываем словарь с типами столбцов
-        if type(type_dict) != dict:  # Проверка на соответствующий тип дл type_dict
-            raise BaseException("type_dict не является словарем")
-        if len(self._type_list) != len(type_dict):  # Проверка на размер таблицы
-            raise BaseException("Несоответствующее количество колонок таблицы и слов в type_dict словаре")
-        if by_number:
-            temp = {}
-            for i in range(1, len(type_dict) + 1):
-                if type_dict.get(i) == None:  # Проверка на нурмерацию таблицы при by_number = True
-                    raise BaseException("Неправильно пронумерован type_dict словарь")
-            counter = 1
-            for i in self._type_list.keys():  # Переводим type_dict как при by_number = False
-                temp.update({i: type_dict[counter]})
-                counter += 1
-        else:
+        try:
+            if type(type_dict) != dict:  # Проверка на соответствующий тип дл type_dict
+                raise BaseException("type_dict не является словарем")
+            if len(self._type_list) != len(type_dict):  # Проверка на размер таблицы
+                raise BaseException("Несоответствующее количество колонок таблицы и слов в type_dict словаре")
+            if by_number:
+                temp = {}
+                for i in range(1, len(type_dict) + 1):
+                    if type_dict.get(i) == None:  # Проверка на нурмерацию таблицы при by_number = True
+                        raise BaseException("Неправильно пронумерован type_dict словарь")
+                counter = 1
+                for i in self._type_list.keys():  # Переводим type_dict как при by_number = False
+                    temp.update({i: type_dict[counter]})
+                    counter += 1
+            else:
+                for i in type_dict.keys():
+                    if self._type_list.get(i) == None:  # Проверка на нурмерацию таблицы при by_number = False
+                        raise BaseException("В таблице нет названия колонки которая есть в type_dict словаре")
             for i in type_dict.keys():
-                if self._type_list.get(i) == None:  # Проверка на нурмерацию таблицы при by_number = False
-                    raise BaseException("В таблице нет названия колонки которая есть в type_dict словаре")
-        for i in type_dict.keys():
-            if not (type_dict[i] == str or type_dict[i] == int or type_dict[i] == float or type_dict[i] == bool):
-                raise BaseException("Неверный тип объекта")  # Проверка на разрешенные типы обЪектов
-            if self._type_list[i] != type_dict[i]:
-                if type_dict[i] == str:  # Переводим в str
-                    for j in range(0, len(self._data[i])):
-                        if self._data[i][j] != None:
-                            self._data[i][j] = str(self._data[i][j])
-                elif type_dict[i] == bool:  # Переводим в bool
-                    for j in range(0, len(self._data[i])):
-                        if self._data[i][j] != None:
-                            self._data[i][j] = bool(self._data[i][j])
-                elif type_dict[i] == int:  # Переводим в int, если можно
-                    for j in range(0, len(self._data[i])):
-                        if self._data[i][j] != None and self._type_list[i] != str:
-                            self._data[i][j] = int(self._data[i][j])
-                        else:
-                            self._data[i][j] = None
-                else:
-                    for j in range(0, len(self._data[i])):  # Переводим в float, если можно
-                        if self._data[i][j] != None and self._type_list[i] != str:
-                            self._data[i][j] = float(self._data[i][j])
-                        else:
-                            self._data[i][j] = None
+                if not (type_dict[i] == str or type_dict[i] == int or type_dict[i] == float or type_dict[i] == bool):
+                    raise BaseException("Неверный тип объекта")  # Проверка на разрешенные типы обЪектов
+                if self._type_list[i] != type_dict[i]:
+                    if type_dict[i] == str:  # Переводим в str
+                        for j in range(0, len(self._data[i])):
+                            if self._data[i][j] != None:
+                                self._data[i][j] = str(self._data[i][j])
+                    elif type_dict[i] == bool:  # Переводим в bool
+                        for j in range(0, len(self._data[i])):
+                            if self._data[i][j] != None:
+                                self._data[i][j] = bool(self._data[i][j])
+                    elif type_dict[i] == int:  # Переводим в int, если можно
+                        for j in range(0, len(self._data[i])):
+                            if self._data[i][j] != None and self._type_list[i] != str:
+                                self._data[i][j] = int(self._data[i][j])
+                            else:
+                                self._data[i][j] = None
+                    else:
+                        for j in range(0, len(self._data[i])):  # Переводим в float, если можно
+                            if self._data[i][j] != None and self._type_list[i] != str:
+                                self._data[i][j] = float(self._data[i][j])
+                            else:
+                                self._data[i][j] = None
+        except IndexError:
+            print('Введены неверные значения!')
+        except ValueError:
+            print('Введены неверные значения!')
+        except AttributeError:
+            print('Таблица неверно записана!')
 
     def get_raws_by_index(self, *values, copy_table=False):
-        field_names = []
-        new_table = Table()
-        for i in self._data:  # ПЕРЕВОДИМ ПЕРВУЮ СТРОКУ В ЛИСТ
-            field_names.append(i)
-            new_table._data[i] = []
-        for n in values:  # ИЩЕМ ЗНАЧЕНИЯ В ТАБЛИЦЕ
-            new_table._data[field_names[0]].append(n)
-            v_index = self._data[field_names[0]].index(n)
-            for j in self._data:  # ПРОВЕРКА НА СОВПАДЕНИЕ ТАБЛИЦЫ
-                if j == field_names[0]:
-                    continue
-                new_elem = self._data[j][v_index]
-                new_table._data[j].append(new_elem)  # ЗАПОЛНЕНИЕ ТАБЛИЦЫ НОВЫМИ ЭЛЕМЕНТАМИ
-        return new_table
+        try:
+            field_names = []
+            new_table = Table()
+            for i in self._data:  # ПЕРЕВОДИМ ПЕРВУЮ СТРОКУ В ЛИСТ
+                field_names.append(i)
+                new_table._data[i] = []
+            for n in values:  # ИЩЕМ ЗНАЧЕНИЯ В ТАБЛИЦЕ
+                new_table._data[field_names[0]].append(n)
+                v_index = self._data[field_names[0]].index(n)
+                for j in self._data:  # ПРОВЕРКА НА СОВПАДЕНИЕ ТАБЛИЦЫ
+                    if j == field_names[0]:
+                        continue
+                    new_elem = self._data[j][v_index]
+                    new_table._data[j].append(new_elem)  # ЗАПОЛНЕНИЕ ТАБЛИЦЫ НОВЫМИ ЭЛЕМЕНТАМИ
+            return new_table
+        except ValueError:
+            print('Такого значения не существует')
+            return
 
     def get_rows_by_number(self, start, stop, copy_table=False):
         try:
@@ -347,12 +369,15 @@ class Table:
             print('Введены неверные значения!')
         except ValueError:
             print('Введены неверные значения!')
+        except AttributeError:
+            print('Таблица неверно записана!')
 
 
 # ФУНКЦИЯ ВЫГРУЗКИ ТАБЛИЦЫ ИЗ ФАЙЛА НАЧАЛО
 def load_table(*files):
+    table = Table()  # Храним таблицу
     for file in files:
-        table = Table()  # Храним таблицу
+
         state_file = os.path.isfile(file)
 
         if not state_file:
@@ -363,7 +388,14 @@ def load_table(*files):
         try:
             if file_type == "pickle":  # Считываем таблицу используя pickle
                 with open(file, "rb") as f:
-                    table = pickle.load(f)
+                    dictionary = pickle.load(f)
+                    type_list = {}
+                    table._data = dictionary
+                    for i in dictionary:
+                        temp = dictionary[i][0]
+                        type_list[i] = type(temp)
+                    table._type_list = type_list
+
             elif file_type == "csv":  # Считываем таблицу используя csv
                 dictionary = {}
                 with open(file, "r") as f:
@@ -396,19 +428,15 @@ def load_table(*files):
             print('Неверные значения в таблице!')
     return table
 
-
 # ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ
 vova = '1'
-table = load_table("NewFile.csv", 'FileToTest.csv')
-table.print_table()
-'''
-table.set_value(vova)
-vova = table.get_value(column=0)
+table = load_table("NewFile.pickle", 'NewTable123.pickle')
+print(table)
 print('get value = %s' % vova)
 table.print_table()
-new = table.get_raws_by_index('1', '3', '4')
+new = table.get_raws_by_index('4')
 new.print_table()
-table.get_rows_by_number(1, 3)
-table.save_table('NewTable123.txt')
-'''
+
+#new.save_table('NewTable123.pickle')
+
 #  ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ ВНИМАНИЕ ЗОНА ТЕСТОВ
