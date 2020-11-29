@@ -110,6 +110,8 @@ class Table:
                 if len(i) > max_l:  # НАХОЖДЕНИЕ САМОГО ДЛИННОГО СЛОВА
                     max_l = len(i)
                 for j in data[i]:
+                    if type(j) == bool:
+                        j = str(j)
                     if len(j) > max_l:
                         max_l = len(j)
                 len_of_col[i] = max_l
@@ -138,6 +140,8 @@ class Table:
                     cheek_bool = True
                     for i in data:  # ДОБАВЛЕНИЕ ПРОБЕЛОВ ДЛЯ РОВНЫХ СТОЛБЦОВ
                         temp = data[i][num_str]
+                        if type(temp) == bool:
+                            temp = str(temp)
                         if cheek_bool:
                             print('|', end='')
                             cheek_bool = False
@@ -156,6 +160,8 @@ class Table:
                 return
         except AttributeError:
             print('Таблица неверно записана!')
+        except TypeError:
+            print('В вашей таблице есть пустые значения!')
     # ФУНКЦИЯ ВЫВОДА ТАБЛИЦЫ В КОНСОЛЬ КОНЕЦ
 
     # ФУНКЦИЯ СОХРАНЕНИЯ ТАБЛИЦЫ В НОВЫЙ ФАЙЛ НАЧАЛО
@@ -204,6 +210,8 @@ class Table:
                         if len(i) > max_l:  # НАХОЖДЕНИЕ САМОГО ДЛИННОГО СЛОВА
                             max_l = len(i)
                         for j in data[i]:
+                            if type(j) == bool:
+                                j = str(j)
                             if len(j) > max_l:
                                 max_l = len(j)
                         len_of_col[i] = max_l  # ЗАПОЛНЕНИЯ СЛОВАРЯ МАКСИМАЛЬНЫМИ ДЛИНАМИ
@@ -233,6 +241,8 @@ class Table:
                                 cheek_bool = True
                                 for i in data:  # ДОБАВЛЕНИЕ ПРОБЕЛОВ ДЛЯ РОВНЫХ СТОЛБЦОВ
                                     temp = data[i][num_str]
+                                    if type(temp) == bool:
+                                        temp = str(temp)
                                     if cheek_bool:
                                         print('|', file=f, end='')
                                         cheek_bool = False
@@ -432,4 +442,3 @@ def load_table(*files):
         except ValueError:
             print('Неверные значения в таблице!')
     return table
-
