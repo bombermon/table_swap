@@ -323,6 +323,8 @@ class Table:
             print('Введены неверные значения!')
         except AttributeError:
             print('Таблица неверно записана!')
+        except KeyError:
+            print('Неправильно собран словарь!')
 
     def get_rows_by_index(self, *values, copy_table=False):
         try:
@@ -430,3 +432,4 @@ def load_table(*files):
         except ValueError:
             print('Неверные значения в таблице!')
     return table
+
